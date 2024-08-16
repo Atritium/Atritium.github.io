@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: manqi's Blog
+title: manqi
 subtitle: manqi's Blog
 description: 搞技术才是我的版本答案
 keywords:
@@ -14,7 +14,7 @@ email: atritium@163.com
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: http://atritium.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
