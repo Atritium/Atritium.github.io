@@ -11,19 +11,19 @@ nav:
 menu:
   首頁: / || fas fa-home
   時間軸: /archives/ || fas fa-archive
-  標籤: /tags/ || fas fa-tags
-  分類: /categories/ || fas fa-folder-open
-  清單||fa fa-heartbeat:
-    音樂: /music/ || fas fa-music
-    照片: /Gallery/ || fas fa-images
-    電影: /movies/ || fas fa-video
-  友鏈: /link/ || fas fa-link
-  關於: /about/ || fas fa-heart
+  # 標籤: /tags/ || fas fa-tags
+  # 分類: /categories/ || fas fa-folder-open
+  # 清單||fa fa-heartbeat:
+    # 音樂: /music/ || fas fa-music
+    # 照片: /Gallery/ || fas fa-images
+    # 電影: /movies/ || fas fa-video
+  # 友鏈: /link/ || fas fa-link
+  # 關於: /about/ || fas fa-heart
 
 # Code Blocks (代碼相關)
 # --------------------------------------
 
-highlight_theme: light #  darker / pale night / light / ocean / mac / mac light / false
+highlight_theme: mac light #  darker / pale night / light / ocean / mac / mac light / false
 highlight_copy: true # copy button
 highlight_lang: true # show the code language
 highlight_shrink: false # true: shrink the code blocks / false: expand the code blocks | none: expand code blocks and hide the button
@@ -34,8 +34,8 @@ code_word_wrap: false
 # formal:
 #   icon: link || the description || color
 social:
-  # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
-  # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
+#  fab fa-github: https://github.com/Atritium || Github || '#24292e'
+  fa-brands fa-bilibili: https://space.bilibili.com/272498370 || bilibili || '#24292e'
 
 # Image (圖片設置)
 # --------------------------------------
@@ -49,7 +49,7 @@ avatar:
   effect: false
 
 # Disable all banner image
-disable_top_img: false
+disable_top_img: true
 
 # The banner image of home page
 index_img: /img/Bg.png
@@ -232,7 +232,7 @@ aside:
       enable: true
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/xxxxxx
+      link: https://github.com/Atritium
   card_announcement:
     enable: true
     content: This is my Blog
@@ -750,7 +750,7 @@ hr_icon:
 
 # the subtitle on homepage (主頁subtitle)
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect (打字效果)
   effect: true
   # Customize typed.js (配置typed.js)
@@ -764,7 +764,7 @@ subtitle:
   # subtitle 會先顯示 source , 再顯示 sub 的內容
   source: false
   # 如果關閉打字效果，subtitle 只會顯示 sub 的第一行文字
-  sub:
+  sub: 搞技术才是我的版本答案
 
 # Loading Animation (加載動畫)
 preloader:
