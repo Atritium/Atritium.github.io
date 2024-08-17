@@ -105,3 +105,23 @@ deploy:
     type: git
     repo: https://github.com/Atritium/Atritium.github.io
     branch: main
+
+# Live2D
+live2d:
+  enable: true
+  scriptFrom: local
+  pluginRootPath: live2dw/
+  pluginJsPath: lib/
+  pluginModelPath: assets/
+  tagMode: false
+  log: false
+  model:
+    use: 凯尔希直播版1
+  display:
+    position: left
+    width: 150
+    height: 300
+  mobile:
+    show: true
+  react:
+    opacity: 0.7
