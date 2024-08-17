@@ -9,10 +9,10 @@ nav:
 
 # Menu 目錄
 menu:
-  首頁: / || fas fa-home
-  時間軸: /archives/ || fas fa-archive
-  # 標籤: /tags/ || fas fa-tags
-  # 分類: /categories/ || fas fa-folder-open
+  首页: / || fas fa-home
+  时间轴: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder-open
   # 清單||fa fa-heartbeat:
     # 音樂: /music/ || fas fa-music
     # 照片: /Gallery/ || fas fa-images
@@ -34,8 +34,9 @@ code_word_wrap: false
 # formal:
 #   icon: link || the description || color
 social:
-#  fab fa-github: https://github.com/Atritium || Github || '#24292e'
+#  fab fa-github: https://github.com/Atritium || github || '#24292e'
   fa-brands fa-bilibili: https://space.bilibili.com/272498370 || bilibili || '#24292e'
+  fa-solid fa-gamepad: https://www.gcores.com/users/456990/talks || 机核 || '#24292e'
 
 # Image (圖片設置)
 # --------------------------------------
@@ -235,7 +236,7 @@ aside:
       link: https://github.com/Atritium
   card_announcement:
     enable: true
-    content: This is my Blog
+    content: 需要科学上网
   card_recent_post:
     enable: true
     limit: 5 # if set 0 will show all
@@ -254,7 +255,7 @@ aside:
     order: 1 # Sort of order. 1, asc for ascending; -1, desc for descending
     sort_order: # Don't modify the setting unless you know how it works
   card_archives:
-    enable: true
+    enable: false
     type: monthly # yearly or monthly
     format: MMMM YYYY # eg: YYYY年MM月
     order: -1 # Sort of order. 1, asc for ascending; -1, desc for descending
