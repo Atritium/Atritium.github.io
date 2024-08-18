@@ -236,7 +236,7 @@ aside:
       link: https://github.com/Atritium
   card_announcement:
     enable: true
-    content: 需要科学上网
+    content: 搬运文章ing
   card_recent_post:
     enable: true
     limit: 5 # if set 0 will show all
