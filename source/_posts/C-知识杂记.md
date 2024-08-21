@@ -648,8 +648,9 @@ public static void Main(string[] args){
 
 > [C# 反射（Reflection）超详细解析](https://blog.csdn.net/weixin_45136016/article/details/139095147)
 
-允许程序在运行时检查和操作对象的类型信息。
-System.Type是一个典型的反射的例子。
+C# 中的反射（Reflection）是一种在运行时动态获取类型信息并操作类型实例的技术。反射允许程序在运行时检查程序集、模块、类型、成员（如方法、属性、字段）等信息，并且可以动态调用方法、访问属性和字段等。反射是 .NET 框架的一部分，主要位于 `System.Reflection` 命名空间中。
+
+反射的核心在于它能够在运行时读取元数据（metadata）。在 .NET 中，所有类型、方法、属性等信息都会在编译时嵌入到程序集的元数据中。反射利用这些元数据来实现对类型及其成员的动态操作。
 
 ```csharp
 public void Method(Object obj){
