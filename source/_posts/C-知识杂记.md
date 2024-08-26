@@ -52,7 +52,7 @@ Mono的组成：
 
 ### 1.2.1 为什么需要GC？
 
-本文是CLR的一个组件，它控制内存的分配和释放，它的出现是为了简化程序员的内存管理工作。
+GC是CLR的一个组件，它控制内存的分配和释放，它的出现是为了简化程序员的内存管理工作。
 
 在面向对象的环境中，每个类型都可以代表可供程序使用的一种资源，访问资源的步骤：
 
@@ -698,11 +698,163 @@ public void Method<T, U>(T obj) where T:U{}
 
 ## 3.5 委托&Lambda&事件
 
-### 3.5.1 概念
+[知乎：事件是以特殊方式声明的委托字段吗](https://zhuanlan.zhihu.com/p/452117637)
 
-[委托看这里](https://blog.csdn.net/manpi/article/details/141110646?spm=1001.2014.3001.5501)
+### 3.5.1 委托（delagate）的用途
 
-### 3.5.2 闭包
+为了方便理解，我们先从委托的用途讲起。
+
+在C/C++中，“函数指针”将对方法的引用作为实参传给另一个方法，而委托在C#中承担着相似的功能。虽然这样说，但我们对委托用途的理解可能还是很抽象，这里用一个简单的例子帮助理解。
+
+冒泡排序是最基础的排序算法，它的代码大致如下：
+
+```csharp
+public static void BubbleSort(int[] items) {
+    if (items == null) return;
+    for(var i = items.Length - 1; i >= 0; i--)
+    {
+        for(var j = 0; j+1 <= i; j++)
+        {
+            if (items[j] > items[j + 1])
+            {
+                var temp = items[j];
+                items[j] = items[j + 1];
+                items[j + 1] = temp;
+            }
+        }
+    }
+}
+```
+该方法对整数数组执行升序排序。
+
+但为了能够选择升序和降序，我们开始拓展这段代码。
+第一个方案：拷贝以上代码，然后把大于操作符换成小于操作符。
+第二个方案：增加一个参数，指出我们当前希望如何排序，然后在代码里进行判断。
+
+但以上代码只照顾到了两种可能的排序方式，如果还想要按其他方式进行排序，代码就会变得很庞大。
+
+为了增加灵活性，减少重复代码，我们可以将比较方法作为参数传入。而此时我们需要有一个数据类型可以表示方法，这就是委托。
+
+委托加入后，代码会变成这样：
+
+```csharp
+public static void BubbleSort(int[] items,Func<int,int,bool> compare) {
+    if (items == null) return;
+    if (compare == null) return;
+    for(var i = items.Length - 1; i >= 0; i--)
+    {
+        for(var j = 0; j+1 <= i; j++)
+        {
+            if (compare(items[j], items[j+1]))
+            {
+                var temp = items[j];
+                items[j] = items[j + 1];
+                items[j + 1] = temp;
+            }
+        }
+    }
+}
+```
+显然灵活多了。
+
+PS：写到这里我突然理解了Sort((x,y)=>x>y)的含义，之前对升序到底对应x>y还是y>x总是一知半解。x>y那么x和y就交换，所以就是升序排列（虽然Sort底层是优化过的快排，不是冒泡排序，但也有两个数比对的步骤，所以代入一下就能得出结论）。
+
+### 3.5.2 委托的声明
+#### 自定义委托
+
+声明委托需要使用关键词delegate，并且指出委托的返回值和所需参数，只有方法的返回值和参数与委托一致，才可以将方法传递给委托。
+
+```csharp
+//先定义委托
+delegate void Feedback();
+//然后使用new操作符构造委托实例并传入方法
+class Program{
+	static void Main(string[] args){
+		//向委托的构造函数传递静态方法
+        Feedback fbStatic = new Feedback(Program.FeedbackToConsole);
+        //传递实例方法
+        Feedback fbInstance = new Feedback(new Program().FeedbackToFile);
+        
+        //调用委托的两种不同方式
+        fbStatic.Invoke();
+        fbInstance();
+	}
+}
+```
+
+#### System.Func和System.Action
+
+为了减少定义自己的委托类型的必要，C#推出了一组常规用途的委托。
+
+**Func**
+代表有返回值的方法。
+
+```csharp
+delegate TResult Func<参数,参数...,out TResult>
+```
+ **Action**
+ 代表无返回值的方法。
+
+
+```csharp
+delegate void Action<参数,参数...>
+```
+
+PS：虽然C#开始提供Func和Action委托，减去了自定义委托类型的必要（要写声明还要自定义名字），但有时候出于可读性，还是可以考虑声明自己的委托类型。如Comparer委托就能使人对其用途一目了然。
+
+```csharp
+public delegate bool Comparer(int first,int second);
+class Program{
+	public static void BubbleSort(int[] items,Comparer comparer){}
+}
+```
+
+### 3.5.3 委托是一种特殊的类
+委托实际上是特殊的类，它派生自System.MulticastDelegate，而后者又派生自System.Delegate，其实把它理解成一种C#里的类型就可以了，但它和一般的类型又有些不同。如果说int，string等是对数据类型的定义，那么委托就类似于对“方法类型”的定义（看着下面的代码仔细琢磨）。
+
+```csharp
+string str;
+delegate void Method(int num);  //理解：Method是变量名，delegate/返回值/参数共同构成了一种“方法类型”
+```
+
+### 3.5.4 Lambda表达式
+上文提到的冒泡排序，如果我们想去调用它，代码大致如下：
+
+```csharp
+public static void BubbleSort(int[] items,Func<int,int,bool> comparer){}
+
+//声明方法
+public static void GreaterThan(int first,int second){
+	return first>second;
+}
+
+//Main函数里调用
+static void Main(string[] arg){
+	int[] items = new int[5];
+	//...初始化
+	BubbleSort(items,GreaterThan);
+}
+```
+你会发现整个过程下来要进行的准备有点太过复杂了，其实我们只需要主体的return first>second。于是C#提供了匿名函数（C# 3.0叫Lambda表达式），简化了这个过程。
+
+```csharp
+BubbleSort(items,(first,second)=>{return first>second});
+```
+### 3.5.5 事件（event）
+事件就是对委托的封装，相对于委托，它只提供了“+=”和“-=”两个方法，保证了在外部操作时的安全性。
+
+**对订阅的封装**
+只提供“+=”和“-=”，避免程序员在编写代码时错误地使用“=”代替“+=”。
+
+**对发布的封装**
+不再提供Invoke方法，保证只有指定字段发生变更时，委托方法才会被调用，避免外部主动调用。
+
+```csharp
+private delegate void Method();
+public event Method EventName;   //提供给外部
+```
+
+### 3.5.6 闭包
 
 闭包允许函数访问外部作用域中的变量，用Lambda或者匿名函数实现，可以捕获不属于其作用域的值。
 
@@ -787,7 +939,7 @@ public static void Main(string[] args){
 
 ## 4.3 反射（Reflection）
 
-> [C# 反射（Reflection）超详细解析](https://blog.csdn.net/weixin_45136016/article/details/139095147)
+[C# 反射（Reflection）超详细解析](https://blog.csdn.net/weixin_45136016/article/details/139095147)
 
 C# 中的反射（Reflection）是一种在运行时动态获取类型信息并操作类型实例的技术。反射允许程序在运行时检查程序集、模块、类型、成员（如方法、属性、字段）等信息，并且可以动态调用方法、访问属性和字段等。反射是 .NET 框架的一部分，主要位于 `System.Reflection` 命名空间中。
 
@@ -799,7 +951,17 @@ public void Method(Object obj){
 	Type t = obj.GetType();
 }
 ```
-## 4.4 多线程
+## 4.4 多线程（Task/async/await）
 
-待补充
+### 4.4.1 概念
+
+[Task/async/await的使用](https://www.cnblogs.com/funiyi816/p/16557254.html)
+
+### 4.4.2 多线程与异步
+
+异步操作指的是在程序执行过程中，可以继续进行其他任务而不需要等待当前操作的完成。
+
+从定义来说，**多线程是异步模型的一种实现形式**，在多线程模型中，可以将耗时的操作放在一个单独的线程中执行，而不会阻塞主线程，这种思路很明显是符合异步模型的。因此，异步操作可以基于多线程实现，而多线程可以用于实现并发执行的异步操作。
+
+有一个著名的说法：“异步不一定是多线程，也可以是单线程”，比如Unity协程的实现方式（协程可以主动申请暂停自身，并提供一个唤醒条件，Unity会每帧检查这个唤醒条件是否已经满足，满足了则继续执行。协程是在主线程上实现的，因此是单线程）。
 
