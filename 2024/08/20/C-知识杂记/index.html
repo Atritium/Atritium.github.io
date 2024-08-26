@@ -164,7 +164,7 @@
 </ul>
 <h3 id="1-1-2-Net的编译过程"><a href="#1-1-2-Net的编译过程" class="headerlink" title="1.1.2 .Net的编译过程"></a>1.1.2 .Net的编译过程</h3><p>首先我们写的代码通过特定语言的编译器编译成CIL（Common Intermediate Language：中间语言，字节码，也可以称为IL或CIL），它是一种托管代码，会存储在.DLL或.EXE的程序集中，它是一种伪代码因此不能被计算机直接识别。它与平台操作系统无关与CPU无关是一种中间语言，这也为跨平台奠定了基础。</p>
 <p>之后在程序运行时再通过CLR（Common Language Runtime：公共语言运行时）内部的编译器将CIL编译成计算机可以识别的CPU指令(机器码：01010101)，CIL语言是在CLR中运行的，而CLR并不知道CIL是由哪种语言编译而来。</p>
-<style>.ookijavmpcfh{zoom:50%;}</style>
+<style>.knxexvukinyp{zoom:50%;}</style><img src="/2024/08/20/C-%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/6ffb7cc2dbd2cb69eea47919b4a99589.png" class="knxexvukinyp" alt="img">
 
 <h3 id="1-1-3-什么是Mono？"><a href="#1-1-3-什么是Mono？" class="headerlink" title="1.1.3 什么是Mono？"></a>1.1.3 什么是Mono？</h3><p>因为.Net Framework本身只能在Windows平台上运行，对于跨平台的需求Mono就产生了。<br>Mono是基于CLI和C#的ECMA标准提供的.Net的另一种实现，与.Net不同的是它将CLR在所有支持的平台上重新实现了一遍(安卓、Switch，PS4)并且还将.Net Framework提供的基础类库也重新实现了一遍。</p>
 <p>Mono的组成：</p>
@@ -228,7 +228,7 @@
 <li>新创建的对象之间关联程度通常较强。heap分配的对象是连续的，关联度较强有利于提高CPU cache的命中率。</li>
 </ul>
 <p>.NET将heap分成3个代龄区域: Gen 0、Gen 1、Gen 2。</p>
-
+<img src="/2024/08/20/C-%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/format,png" class="" title="img">
 
 <p>如果Gen 0 heap内存达到阀值，则触发0代GC，0代GC后Gen 0中幸存的对象进入Gen1。如果Gen 1的内存达到阀值，则进行1代GC，1代GC将Gen 0 heap和Gen 1 heap一起进行回收，幸存的对象进入Gen2。2代GC将Gen 0 heap、Gen 1 heap和Gen 2 heap一起回收。</p>
 <p>Gen 0和Gen 1比较小，这两个代龄加起来总是保持在16M左右；Gen2的大小由应用程序确定，可能达到几G，因此0代和1代GC的成本非常低，2代GC称为fullGC，通常成本很高。</p>
@@ -291,10 +291,10 @@
 <h1 id="2-数据类型"><a href="#2-数据类型" class="headerlink" title="2 数据类型"></a>2 数据类型</h1><h2 id="2-1-类型的划分"><a href="#2-1-类型的划分" class="headerlink" title="2.1 类型的划分"></a>2.1 类型的划分</h2><p>C#的类型有两种：值类型（value type）和引用类型（reference type）。值类型的变量存储数据，而引用类型的变量存储对数据的引用。</p>
 <h3 id="2-1-1-值类型"><a href="#2-1-1-值类型" class="headerlink" title="2.1.1 值类型"></a>2.1.1 值类型</h3><p>值类型直接包含值，换言之，变量引用的位置就是值在内存中实际存储的位置。将第一个变量的值赋给第二个变量，会在新变量的位置创建原始变量的值的一个内存副本。类似的，将值类型的实例传给方法，如Console.WriteLine()，也会生成一个内存副本，在方法内部对参数值进行任何修改都不会影响原始值。</p>
 <p>对于值类型，每个变量都有它们自己的数据副本（ref和out参数除外）。</p>
-
+<img src="/2024/08/20/C-%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/53022300bd71438da7def67964f17d3d.png" class="" title="在这里插入图片描述">
 
 <h3 id="2-1-2-引用类型"><a href="#2-1-2-引用类型" class="headerlink" title="2.1.2 引用类型"></a>2.1.2 引用类型</h3><p>相反，引用类型的变量存储的是对数据存储位置的引用，而不是直接存储数据。因此，为了访问数据，“运行时”要先从变量中读取内存位置，再“跳转”到包含数据的内存位置。</p>
-
+<img src="/2024/08/20/C-%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/ae2b8456cfab4757a30a32c017e382f3.png" class="" title="在这里插入图片描述">
 <p>引用类型复制引用而不需要复制所引用的数据，表现为在栈内开辟一块新的空间，存储复制数据在堆中的地址，因此当有一个引用类型变量复制了另一个引用类型变量，该变量的改变也会引起另一个变量的改变。</p>
 <h3 id="2-1-3-值类型和引用类型的区别"><a href="#2-1-3-值类型和引用类型的区别" class="headerlink" title="2.1.3 值类型和引用类型的区别"></a>2.1.3 值类型和引用类型的区别</h3><ul>
 <li>值类型数据存储在栈上，而引用类型数据存储在堆上。</li>
@@ -368,7 +368,7 @@
 </blockquote>
 <p><strong>驻留性</strong><br>运行时将字符串值存储在“驻留池（字符串池）”中，相同值的字符串都复用同一地址。</p>
 <p>一般只有两种情况下字符串会被驻留：<br>1.字面量的字符串，这在编译阶段就能确定的“字符串常量值”。相同值的字符串只会分配一次，后面的就会复用同一引用。例如 string str &#x3D; “abc” 这种。<br>2.过 string.Intern(string) 方法主动添加驻留池。</p>
-
+<img src="/2024/08/20/C-%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/991d18dd207d4da0b7248daf8f54e345.png" class="" title="在这里插入图片描述">
 <p>驻留的字符串（字符串池)在托管堆上存储，大家共享，内部其实是一个哈希表，存储被驻留的字符串和其内存地址。驻留池生命周期同进程，并不受GC管理。</p>
 <h3 id="2-4-2-字符串的比较（-和Equals-）"><a href="#2-4-2-字符串的比较（-和Equals-）" class="headerlink" title="2.4.2 字符串的比较（&#x3D;&#x3D;和Equals()）"></a>2.4.2 字符串的比较（&#x3D;&#x3D;和Equals()）</h3><p>对于值类型，这俩都一样，都是比较两个值类型的值是否相等，所以在这里我们只探讨引用类型。<br><strong>原本的</strong><br>C#的“&#x3D;&#x3D;”用来比较引用类型的地址是否相等，即对比的两个变量是否指向同一个内存地址。而Equal()则比较的是引用类型的内容是否相等，即堆内存里存放的值是否相等。<br><strong>string的</strong><br>而string的“&#x3D;&#x3D;”进行了重载，作用和Equals()一致。</p>
 <h3 id="2-4-3-字符串的连接"><a href="#2-4-3-字符串的连接" class="headerlink" title="2.4.3 字符串的连接"></a>2.4.3 字符串的连接</h3><blockquote>
