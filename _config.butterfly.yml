@@ -346,13 +346,13 @@ rightside_item_order:
 # (false 需要時加載，須在使用的 Markdown Front-matter 加上 mathjax: true)
 
 # MathJax
-mathjax:
-  enable: false
-  per_page: false
+mathjax: 
+  enable: true
+  per_page: true
 
 # KaTeX
 katex:
-  enable: false
+  enable: true
   per_page: false
   hide_scrollbar: true
 

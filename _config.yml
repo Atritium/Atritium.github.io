@@ -125,3 +125,12 @@ live2d:
     show: true
   react:
     opacity: 0.7
+
+kramed:
+  gfm: true
+  pedantic: false
+  sanitize: false
+  tables: true
+  breaks: true
+  smartLists: true
+  smartypants: true
