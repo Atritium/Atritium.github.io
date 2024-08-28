@@ -101,3 +101,29 @@ Vector3 eAngle = nQ2.eulerAngles;
 A.transform.rotation = Quaternion.Slerp(A.rotation, target.rotation, Time.deltaTime);
 ```
 
+
+
+## 2 Normalize和ClampMagnitude
+
+两者都是Unity里处理向量常用的方法，主要起到规范化向量的功能。
+
+### 2.1 Normalize
+
+Normalize 是一种操作，将向量调整为单位向量，即向量的长度变为 1，同时保持其方向不变。
+
+```
+Vector3 direction = new Vector3(3, 4, 0);
+direction.Normalize(); // direction becomes (0.6, 0.8, 0)
+```
+
+### 2.2 ClampMagnitude
+
+ClampMagnitude是一种操作，用于将一个向量的长度限制在指定的最大值。如果向量的长度超过了这个最大值，它将被缩小到该长度，同时保持方向不变。
+
+ClampMagnitude常用于限制速度、力量或其他物理量，防止它们超过某个阈值。
+
+```c#
+Vector3 velocity = new Vector3(10, 15, 0);
+velocity = Vector3.ClampMagnitude(velocity, 5); // velocity becomes (3.33, 5, 0)
+```
+
