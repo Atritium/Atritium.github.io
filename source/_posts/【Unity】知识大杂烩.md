@@ -44,8 +44,14 @@ categories:
 
 其实从数学上就能马上推算出来：
 
-$Rx(θ) = \begin{bmatrix} 1&0&0 \\ 0&cosθ&sinθ \\ 0&-sinθ&cosθ \end{bmatrix}$ $Ry(θ) = \begin{bmatrix} cosθ&0&-sinθ \\ 0&1&0 \\sinθ&0&cosθ \end{bmatrix}$ $Rz(θ) = \begin{bmatrix} cosθ&sinθ&0 \\ -sinθ&cosθ&0\\0&0&1 \end{bmatrix}$
+绕三个轴旋转的旋转矩阵：
+$$
+Rx(θ) = \begin{bmatrix} 1&0&0 \\ 0&cosθ&sinθ \\ 0&-sinθ&cosθ \end{bmatrix}
 
+Ry(θ) = \begin{bmatrix} cosθ&0&-sinθ \\ 0&1&0 \\sinθ&0&cosθ \end{bmatrix}
+
+Rz(θ) = \begin{bmatrix} cosθ&sinθ&0 \\ -sinθ&cosθ&0\\0&0&1 \end{bmatrix}
+$$
 当y轴旋转90°，y轴的旋转矩阵则变为：
 $$
 Ry(θ) = \begin{bmatrix} 0&0&-1 \\ 0&1&0 \\1&0&0 \end{bmatrix}
