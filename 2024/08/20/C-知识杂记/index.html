@@ -164,7 +164,7 @@
 </ul>
 <h3 id="1-1-2-Net的编译过程"><a href="#1-1-2-Net的编译过程" class="headerlink" title="1.1.2 .Net的编译过程"></a>1.1.2 .Net的编译过程</h3><p>首先我们写的代码通过特定语言的编译器编译成CIL（Common Intermediate Language：中间语言，字节码，也可以称为IL或CIL），它是一种托管代码，会存储在.DLL或.EXE的程序集中，它是一种伪代码因此不能被计算机直接识别。它与平台操作系统无关与CPU无关是一种中间语言，这也为跨平台奠定了基础。</p>
 <p>之后在程序运行时再通过CLR（Common Language Runtime：公共语言运行时）内部的编译器将CIL编译成计算机可以识别的CPU指令(机器码：01010101)，CIL语言是在CLR中运行的，而CLR并不知道CIL是由哪种语言编译而来。</p>
-<p><style>.akzmbsulxgqb{zoom:50%;}</style><img src="/2024/08/20/C-%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/6ffb7cc2dbd2cb69eea47919b4a99589.png" class="akzmbsulxgqb" alt="img"></p>
+<p><style>.bvgklnsnaara{zoom:50%;}</style><img src="/2024/08/20/C-%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/6ffb7cc2dbd2cb69eea47919b4a99589.png" class="bvgklnsnaara" alt="img"></p>
 <h3 id="1-1-3-什么是Mono？"><a href="#1-1-3-什么是Mono？" class="headerlink" title="1.1.3 什么是Mono？"></a>1.1.3 什么是Mono？</h3><p>因为.Net Framework本身只能在Windows平台上运行，对于跨平台的需求Mono就产生了。<br>Mono是基于CLI和C#的ECMA标准提供的.Net的另一种实现，与.Net不同的是它将CLR在所有支持的平台上重新实现了一遍(安卓、Switch，PS4)并且还将.Net Framework提供的基础类库也重新实现了一遍。</p>
 <p>Mono的组成：</p>
 <ul>
