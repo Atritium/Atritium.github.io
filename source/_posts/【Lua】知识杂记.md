@@ -10,6 +10,8 @@ categories:
 
 
 
+[Lua菜鸟教程](https://www.runoob.com/lua/lua-garbage-collection.html)
+
 # 2 变量
 
 ## 2.1 概念
@@ -931,3 +933,107 @@ print(myTable.age)
 #### rawset
 
 该方法会忽略__newIndex的设置，它只会修改指定表的变量。
+
+# 10 面向对象
+
+- 封装
+- 继承
+- 多态
+
+## 10.1 封装
+
+“类”是封装的体现。
+
+```lua
+Object = {}
+Object.id = 1
+Object.Text = function()
+	print("Hello,World!")
+end
+
+--实现new()方法：实际上是返回了一个空表
+function Object:new()
+	local obj = {}
+	setmetatable(obj,self)
+	self.__index = self
+	return obj
+end
+
+--在指定表中找不到对应的属性时，会到其元表__index指定的表里找
+local myObj = Object:new()
+print(myObj.id)
+print(myObj.Text())
+```
+
+## 10.2 继承
+
+```lua
+Object = {}
+Object.id = 1
+
+function Object:subClass(className)
+	--通过大G表申明一个指定名字的公共空表
+	_G[className] = {}
+	local obj = _G[className]
+	setmetatable(obj,self)
+	self.__index = self
+end
+
+Object:subClass("GameObject")
+print(GameObject.id)
+```
+
+## 10.3 多态
+
+多态即相同行为不同表现：在这里指的是相同方法不同执行逻辑。
+
+```lua
+--忽略前面的new和subclass的方法
+
+function Object:hello()
+	print("Hello,Object!")
+end
+
+Object:subClass("GameObject")
+local obj = GameObject:new()
+obj:hello()
+
+--重写
+function GameObject:hello()
+	print("Hello,GameObject!")
+end
+obj:hello()
+```
+
+以上的逻辑我们确实实现了重写，但与C#不同的是，此时我们想要再调用父类的hello()方法已经不可以了。所以我们应该去实现一个类似于base的概念，让我们在重写后依旧可以调用父类的方法。
+
+```lua
+function Object:subClass(className)
+	_G[className] = {}
+	local obj = _G[className]
+	setmetatable(obj,self)
+	self.__index = self
+	--Add：子类定义一个base属性指向父类
+	obj.base = self
+end
+
+--...
+
+obj.base:hello()
+```
+
+# 11 Lua垃圾回收
+
+**获取当前占用字节数**
+
+```lua
+--获取当前占用KB，*1024则是占用字节数
+print(collectgarbage("count"))
+```
+
+**垃圾回收**
+
+```lua
+collectgarbage("collect")
+```
+
