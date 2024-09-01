@@ -39,3 +39,110 @@ categories:
 
 ## 2 加载AB包
 
+```c#
+using System.Collections;
+using System.Collections.Generic;
+using TMPro.EditorUtilities;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class ABLoadManager : SingletonMono<ABLoadManager>
+{
+    private string PathUrl
+    {
+        get
+        {
+            return Application.streamingAssetsPath + "/";
+        }
+    }
+
+    private string MainABName
+    {
+        get
+        {
+#if UNITY_IOS
+            return "IOS";
+#elif UNITY_ANDROID
+            return "Android";
+#else
+            return "PC";
+#endif
+        }
+    }
+
+    private AssetBundle mainAB = null;
+    private AssetBundleManifest mainABManifest = null;
+    private Dictionary<string, AssetBundle> abDict = new Dictionary<string, AssetBundle>();
+
+    
+    public T LoadRes<T>(string abName,string resName) where T : Object
+    {
+        if (!abDict.ContainsKey(abName))
+        {
+            AddToABDict(abName);
+        }
+        return abDict[abName].LoadAsset<T>(resName);
+    }
+
+    public void LoadResAsync<T>(string abName,string resName,UnityAction<T> action) where T : Object {
+        if (!abDict.ContainsKey(abName))
+        {
+            AddToABDict(abName);
+        }
+        StartCoroutine(WaitForLoadResAsync(abName, resName, action));
+    }
+
+    private IEnumerator WaitForLoadResAsync<T>(string abName, string resName, UnityAction<T> action) where T :Object{
+        AssetBundleRequest abr = abDict[abName].LoadAssetAsync<T>(resName);
+        yield return abr;
+        action?.Invoke(abr.asset as T);
+    }
+
+    private void AddToABDict(string abName)
+    {
+        //加载主包
+        if (mainAB == null)
+        {
+            mainAB = AssetBundle.LoadFromFile(PathUrl + MainABName);
+            mainABManifest = mainAB.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+        }
+        //根据依赖关系加载依赖包
+        var strs = mainABManifest.GetAllDependencies(abName);
+        foreach (var str in strs)
+        {
+            if (!abDict.ContainsKey(str))
+            {
+                abDict[str] = AssetBundle.LoadFromFile(PathUrl + str);
+            }
+        }
+        //加载目标包
+        abDict[abName] = AssetBundle.LoadFromFile(PathUrl+abName);
+    }
+
+    /// <summary>
+    /// 卸载单个AB包
+    /// </summary>
+    public void UnLoadAB(string abName) {
+        if (abDict.ContainsKey(abName))
+        {
+            abDict[abName].Unload(false);
+            abDict.Remove(abName);
+        }
+    }
+
+    /// <summary>
+    /// 卸载所有的AB包
+    /// </summary>
+    public void UnLoadAllAB()
+    {
+        AssetBundle.UnloadAllAssetBundles(false);
+        abDict.Clear();
+        mainAB = null;
+        mainABManifest = null;
+    }
+}
+```
+
+# XLua
+

@@ -711,7 +711,7 @@ click_heart:
 clickShowText:
   enable: false
   text:
-    # - I
+    - 经验+1
     # - LOVE
     # - YOU
   fontSize: 15px
@@ -720,7 +720,7 @@ clickShowText:
 
 # Default display mode (網站默認的顯示模式)
 # light (default) / dark
-display_mode: light
+display_mode: dark
 
 # Beautify (美化頁面顯示)
 beautify:
@@ -767,7 +767,7 @@ subtitle:
   source: false
   # 如果關閉打字效果，subtitle 只會顯示 sub 的第一行文字
   sub: 
-    - 任天堂是世界的主宰
+    - 要相信重复的力量
 
 # Loading Animation (加載動畫)
 preloader:
