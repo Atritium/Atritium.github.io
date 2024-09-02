@@ -194,15 +194,78 @@ void Start() {
 	//Lua解析器
 	var luaEnv = new LuaEnv();
     //添加自定义文件加载规则
-	luaEnv.AddLoader(ResetCustomLoader);
+	luaEnv.AddLoader(MyCustomABLoader);
 }
 
-public byte[] ResetCustomLoader(ref string filepath){
+public byte[] MyCustomABLoader(ref string filepath){
 	//...
+    //这里可以写从AB包加载的相关逻辑
+    //注意打进AB包时lua文件的后缀要改成.txt的
+    var path = Application.streamingAssetsPath + "/lua";
+	var ab = AssetBundle.LoadFromFile(path);
+	var tx = ab.LoadAsset<TextAsset>(filePath + ".lua");
+	return tx.bytes;
 }
 ```
 
 Lua会在调用`require("Lua文件名")`时依次访问目前所有的文件加载规则，直到找到对应的文件。
 
 访问 自定义加载规则1->自定义加载规则2->...->默认加载规则。
+
+### 1.3 获取全局变量
+
+```c#
+//得到Lua中的大G表
+public LuaTable Global{
+	get{
+		return luaEnv.Global;
+	}
+}
+
+private void Start(){
+    //虽然Lua中的数值类型只有Number一种，但我们可以根据具体的数值，在拿到C#里的时候进行转换，如下
+    var i = Global.Get<int>("textNumber");
+    Global.Set("textNumber",55);
+}
+```
+
+### 1.4 获取全局函数
+
+**lua文件**
+
+```lua
+textFun = function()
+	print("Hello,World!")
+end
+```
+
+**C#文件**
+
+```c#
+//得到Lua中的大G表
+public LuaTable Global{
+	get{
+		return luaEnv.Global;
+	}
+}
+//定义一个和方法相同形式的委托
+public delegate void CustomCall();
+private void Start(){
+    //1.自定义委托/C#自带委托Action&Func/UnityAction
+	var call = Global.Get<CustomCall>("textFun");
+	call();
+    
+    //2.XLua提供的方法
+    var lf = Global.Get<LuaFunction>("textFun");
+    lf.Call();
+}
+```
+
+另外，对于自定义委托，无参无返回值的XLua已经帮助处理了，所以不需要特殊声明，但如果是有参有返回值的委托，需要在前面加上`[CSharpCallLua]`。
+
+```c#
+//得点XLua工具里的生成代码，XLua才能识别并生成对应的
+[CSharpCallLua]
+public delegate int CustomCall(int num);
+```
 
