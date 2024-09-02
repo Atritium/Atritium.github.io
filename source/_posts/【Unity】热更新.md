@@ -13,7 +13,15 @@ categories:
 
 
 
+热更新原理：
 
+AssetBundle包可以从服务器上下载然后加载进游戏，所以我们需要热更的资源只要丢在服务器上，等进入游戏时再进行下载就可以了。但AssetBundle只能打包资源，不能打包C#代码（可能出于安全和方便管理），因此我们需要考虑代码热更的方式。
+
+现在主流的一些热更方式：
+
+- ToLua/XLua
+- ILRuntime
+- HybridCLR
 
 # 资源管理
 
@@ -157,4 +165,44 @@ public class ABLoadManager : SingletonMono<ABLoadManager>
 Addressable是在AssetBundle基础上实现的，详细用法：[参考](https://zhuanlan.zhihu.com/p/635796583)
 
 # XLua
+
+## 1 C#调用Lua
+
+### 1.1 Lua解析器
+
+```c#
+//Lua解析器
+var luaEnv = new LuaEnv();
+
+//执行Lua代码
+luaEnv.DoString("print('Hello,World!')");
+//执行一个Lua脚本：运用Lua多脚本执行的方法require，脚本默认从Resources文件加载，并且由于Resources只支持某几种文件，比如txt,bytes等，因此文件名要写为LuaTest.lua.txt
+luaEnv.DoString("require('LuaTest')");
+
+//清除Lua中没有手动释放的对象
+luaEnv.Tick();
+//销毁解析器
+luaEnv.Dispose();
+```
+
+### 1.2 文件加载重定向
+
+解决Lua文件默认从Resources文件执行不方便的问题。
+
+```c#
+void Start() {
+	//Lua解析器
+	var luaEnv = new LuaEnv();
+    //添加自定义文件加载规则
+	luaEnv.AddLoader(ResetCustomLoader);
+}
+
+public byte[] ResetCustomLoader(ref string filepath){
+	//...
+}
+```
+
+Lua会在调用`require("Lua文件名")`时依次访问目前所有的文件加载规则，直到找到对应的文件。
+
+访问 自定义加载规则1->自定义加载规则2->...->默认加载规则。
 
