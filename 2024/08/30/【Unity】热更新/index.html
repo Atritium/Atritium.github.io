@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【Unity】热更新（AssetBundle+Lua） | manqi</title><meta name="author" content="manqi,atritium@163.com"><meta name="copyright" content="manqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="AssetBundle1 打包面板信息1.1 AB包的压缩格式 LZMA 默认压缩方式，能使压缩文件达到最小。但由于其压缩方式是基于整个AssetBundle的数据流实现的，因此在对其解压时需将整个流进行解压。   LZ4 一种基于块的压缩算法，压缩文件比LZMA大，但在解压时只需要解压包含所请求资源的字节的块。   No Compression 不压缩。     1.2 AB包生成的文件 对应资">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Unity】热更新（AssetBundle+Lua）">
+<meta property="og:url" content="http://atritium.github.io/2024/08/30/%E3%80%90Unity%E3%80%91%E7%83%AD%E6%9B%B4%E6%96%B0/index.html">
+<meta property="og:site_name" content="manqi">
+<meta property="og:description" content="AssetBundle1 打包面板信息1.1 AB包的压缩格式 LZMA 默认压缩方式，能使压缩文件达到最小。但由于其压缩方式是基于整个AssetBundle的数据流实现的，因此在对其解压时需将整个流进行解压。   LZ4 一种基于块的压缩算法，压缩文件比LZMA大，但在解压时只需要解压包含所请求资源的字节的块。   No Compression 不压缩。     1.2 AB包生成的文件 对应资">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://atritium.github.io/img/HeadIcon.jpg">
+<meta property="article:published_time" content="2024-08-30T07:24:51.000Z">
+<meta property="article:modified_time" content="2024-09-02T02:08:32.524Z">
+<meta property="article:author" content="manqi">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="Lua">
+<meta property="article:tag" content="AssetBundle">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://atritium.github.io/img/HeadIcon.jpg"><link rel="shortcut icon" href="/img/HeadIcon.jpg"><link rel="canonical" href="http://atritium.github.io/2024/08/30/%E3%80%90Unity%E3%80%91%E7%83%AD%E6%9B%B4%E6%96%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【Unity】热更新（AssetBundle+Lua）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-02 10:08:32'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/HeadIcon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/pageBg1.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="manqi"><span class="site-name">manqi</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">【Unity】热更新（AssetBundle+Lua）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-08-30T07:24:51.000Z" title="发表于 2024-08-30 15:24:51">2024-08-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-09-02T02:08:32.524Z" title="更新于 2024-09-02 10:08:32">2024-09-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity/">Unity</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="【Unity】热更新（AssetBundle+Lua）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="AssetBundle"><a href="#AssetBundle" class="headerlink" title="AssetBundle"></a>AssetBundle</h1><h2 id="1-打包面板信息"><a href="#1-打包面板信息" class="headerlink" title="1 打包面板信息"></a>1 打包面板信息</h2><h3 id="1-1-AB包的压缩格式"><a href="#1-1-AB包的压缩格式" class="headerlink" title="1.1 AB包的压缩格式"></a>1.1 AB包的压缩格式</h3><ul>
+<li>LZMA<ul>
+<li>默认压缩方式，能使压缩文件达到最小。但由于其压缩方式是基于整个AssetBundle的数据流实现的，因此在对其解压时需将整个流进行解压。</li>
+</ul>
+</li>
+<li>LZ4<ul>
+<li>一种基于块的压缩算法，压缩文件比LZMA大，但在解压时只需要解压包含所请求资源的字节的块。</li>
+</ul>
+</li>
+<li>No Compression<ul>
+<li>不压缩。</li>
+</ul>
+</li>
+</ul>
+
+<h3 id="1-2-AB包生成的文件"><a href="#1-2-AB包生成的文件" class="headerlink" title="1.2 AB包生成的文件"></a>1.2 AB包生成的文件</h3><ul>
+<li>对应资源的文件<ul>
+<li>资源AB包</li>
+<li>manifest文件<ul>
+<li>记录了AB包的文件信息</li>
+<li>加载时可以用来提供资源信息、资源依赖关系等等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>关键文件（和定义的output文件同名）<ul>
+<li>主包</li>
+<li>manifest文件：记录AB包之间的依赖信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-加载AB包"><a href="#2-加载AB包" class="headerlink" title="2 加载AB包"></a>2 加载AB包</h2><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> TMPro.EditorUtilities;</span><br><span class="line"><span class="keyword">using</span> Unity.VisualScripting;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.Events;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ABLoadManager</span> : <span class="title">SingletonMono</span>&lt;<span class="title">ABLoadManager</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">string</span> PathUrl</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> Application.streamingAssetsPath + <span class="string">&quot;/&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">string</span> MainABName</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span></span><br><span class="line">        &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> UNITY_IOS</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;IOS&quot;</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">elif</span> UNITY_ANDROID</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Android&quot;</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;PC&quot;</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> AssetBundle mainAB = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> AssetBundleManifest mainABManifest = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> Dictionary&lt;<span class="built_in">string</span>, AssetBundle&gt; abDict = <span class="keyword">new</span> Dictionary&lt;<span class="built_in">string</span>, AssetBundle&gt;();</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">LoadRes</span>&lt;<span class="title">T</span>&gt;(<span class="params"><span class="built_in">string</span> abName,<span class="built_in">string</span> resName</span>) <span class="keyword">where</span> T : Object</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!abDict.ContainsKey(abName))</span><br><span class="line">        &#123;</span><br><span class="line">            AddToABDict(abName);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> abDict[abName].LoadAsset&lt;T&gt;(resName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LoadResAsync</span>&lt;<span class="title">T</span>&gt;(<span class="params"><span class="built_in">string</span> abName,<span class="built_in">string</span> resName,UnityAction&lt;T&gt; action</span>) <span class="keyword">where</span> T : Object</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!abDict.ContainsKey(abName))</span><br><span class="line">        &#123;</span><br><span class="line">            AddToABDict(abName);</span><br><span class="line">        &#125;</span><br><span class="line">        StartCoroutine(WaitForLoadResAsync(abName, resName, action));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> IEnumerator <span class="title">WaitForLoadResAsync</span>&lt;<span class="title">T</span>&gt;(<span class="params"><span class="built_in">string</span> abName, <span class="built_in">string</span> resName, UnityAction&lt;T&gt; action</span>) <span class="keyword">where</span> T :Object</span>&#123;</span><br><span class="line">        AssetBundleRequest abr = abDict[abName].LoadAssetAsync&lt;T&gt;(resName);</span><br><span class="line">        <span class="keyword">yield</span> <span class="keyword">return</span> abr;</span><br><span class="line">        action?.Invoke(abr.asset <span class="keyword">as</span> T);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">AddToABDict</span>(<span class="params"><span class="built_in">string</span> abName</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//加载主包</span></span><br><span class="line">        <span class="keyword">if</span> (mainAB == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            mainAB = AssetBundle.LoadFromFile(PathUrl + MainABName);</span><br><span class="line">            mainABManifest = mainAB.LoadAsset&lt;AssetBundleManifest&gt;(<span class="string">&quot;AssetBundleManifest&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//根据依赖关系加载依赖包</span></span><br><span class="line">        <span class="keyword">var</span> strs = mainABManifest.GetAllDependencies(abName);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> str <span class="keyword">in</span> strs)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!abDict.ContainsKey(str))</span><br><span class="line">            &#123;</span><br><span class="line">                abDict[str] = AssetBundle.LoadFromFile(PathUrl + str);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//加载目标包</span></span><br><span class="line">        abDict[abName] = AssetBundle.LoadFromFile(PathUrl+abName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 卸载单个AB包</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">UnLoadAB</span>(<span class="params"><span class="built_in">string</span> abName</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (abDict.ContainsKey(abName))</span><br><span class="line">        &#123;</span><br><span class="line">            abDict[abName].Unload(<span class="literal">false</span>);</span><br><span class="line">            abDict.Remove(abName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 卸载所有的AB包</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">UnLoadAllAB</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        AssetBundle.UnloadAllAssetBundles(<span class="literal">false</span>);</span><br><span class="line">        abDict.Clear();</span><br><span class="line">        mainAB = <span class="literal">null</span>;</span><br><span class="line">        mainABManifest = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="XLua"><a href="#XLua" class="headerlink" title="XLua"></a>XLua</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://atritium.github.io">manqi</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://atritium.github.io/2024/08/30/%E3%80%90Unity%E3%80%91%E7%83%AD%E6%9B%B4%E6%96%B0/">http://atritium.github.io/2024/08/30/%E3%80%90Unity%E3%80%91%E7%83%AD%E6%9B%B4%E6%96%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://atritium.github.io" target="_blank">manqi</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/Lua/">Lua</a><a class="post-meta__tags" href="/tags/AssetBundle/">AssetBundle</a></div><div class="post_share"><div class="social-share" data-image="/img/HeadIcon.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/08/31/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84and%E7%AE%97%E6%B3%95%E3%80%91%E6%9D%82%E8%AE%B0/" title="【数据结构and算法】杂记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【数据结构and算法】杂记</div></div></a></div><div class="next-post pull-right"><a href="/2024/08/29/%E3%80%90Lua%E3%80%91%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/" title="【Lua】知识杂记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【Lua】知识杂记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/08/28/%E3%80%90%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97%E3%80%91FPS-Demo/" title="【开发日志】FPS-Demo"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-28</div><div class="title">【开发日志】FPS-Demo</div></div></a></div><div><a href="/2024/08/27/%E3%80%90Unity%E3%80%91%E7%9F%A5%E8%AF%86%E5%A4%A7%E6%9D%82%E7%83%A9/" title="【Unity】知识大杂烩"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-27</div><div class="title">【Unity】知识大杂烩</div></div></a></div><div><a href="/2024/08/26/%E3%80%90Unity-UGUI%E3%80%91UGUI%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="【Unity-UGUI】UGUI性能优化"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-26</div><div class="title">【Unity-UGUI】UGUI性能优化</div></div></a></div><div><a href="/2024/08/26/%E3%80%90Unity-UGUI%E3%80%91ScrollView%E8%87%AA%E5%8A%A8%E5%AE%9A%E4%BD%8D/" title="【Unity-UGUI】ScrollView自动定位"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-26</div><div class="title">【Unity-UGUI】ScrollView自动定位</div></div></a></div><div><a href="/2024/08/21/games101%E7%AC%94%E8%AE%B0/" title="Games101笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-21</div><div class="title">Games101笔记</div></div></a></div><div><a href="/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" title="【Unity-Excel】Excel游戏数据处理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-19</div><div class="title">【Unity-Excel】Excel游戏数据处理</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/HeadIcon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">manqi</div><div class="author-info__description">搞技术才是我的版本答案</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Atritium"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://space.bilibili.com/272498370" target="_blank" title="bilibili"><i class="fa-brands fa-bilibili" style="color: #24292e;"></i></a><a class="social-icon" href="https://www.gcores.com/users/456990/talks" target="_blank" title="机核"><i class="fa-solid fa-gamepad" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">搬运文章ing</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AssetBundle"><span class="toc-text">AssetBundle</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%89%93%E5%8C%85%E9%9D%A2%E6%9D%BF%E4%BF%A1%E6%81%AF"><span class="toc-text">1 打包面板信息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-AB%E5%8C%85%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%A0%BC%E5%BC%8F"><span class="toc-text">1.1 AB包的压缩格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-AB%E5%8C%85%E7%94%9F%E6%88%90%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-text">1.2 AB包生成的文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8A%A0%E8%BD%BDAB%E5%8C%85"><span class="toc-text">2 加载AB包</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XLua"><span class="toc-text">XLua</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/31/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84and%E7%AE%97%E6%B3%95%E3%80%91%E6%9D%82%E8%AE%B0/" title="【数据结构and算法】杂记">【数据结构and算法】杂记</a><time datetime="2024-08-30T16:00:00.000Z" title="发表于 2024-08-31 00:00:00">2024-08-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/30/%E3%80%90Unity%E3%80%91%E7%83%AD%E6%9B%B4%E6%96%B0/" title="【Unity】热更新（AssetBundle+Lua）">【Unity】热更新（AssetBundle+Lua）</a><time datetime="2024-08-30T07:24:51.000Z" title="发表于 2024-08-30 15:24:51">2024-08-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/29/%E3%80%90Lua%E3%80%91%E7%9F%A5%E8%AF%86%E6%9D%82%E8%AE%B0/" title="【Lua】知识杂记">【Lua】知识杂记</a><time datetime="2024-08-28T16:00:00.000Z" title="发表于 2024-08-29 00:00:00">2024-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/28/%E3%80%90%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97%E3%80%91FPS-Demo/" title="【开发日志】FPS-Demo">【开发日志】FPS-Demo</a><time datetime="2024-08-27T16:00:00.000Z" title="发表于 2024-08-28 00:00:00">2024-08-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/27/%E4%B8%AA%E4%BA%BA%E6%88%90%E9%95%BF%E6%8C%87%E5%8C%97/" title="个人成长指北">个人成长指北</a><time datetime="2024-08-26T16:00:00.000Z" title="发表于 2024-08-27 00:00:00">2024-08-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By manqi</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><script>(() => {
+  const initGitalk = () => {
+    const gitalk = new Gitalk(Object.assign({
+      clientID: 'Ov23liGa3sa4gLFCWH3y',
+      clientSecret: '452c85b6dbdcf2685f5023d79c4fda4d6844948a',
+      repo: 'blog-comment',
+      owner: 'Atritium',
+      admin: ['Atritium'],
+      id: 'c4960762b1e8b2f7ea26e86e332112de',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async() => {
+    if (typeof Gitalk === 'function') initGitalk()
+    else {
+      await getCSS('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.css')
+      await getScript('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js')
+      initGitalk()
+    }
+  }
+  
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
