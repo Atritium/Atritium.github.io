@@ -1,5 +1,5 @@
 ---
-title: 【Unity】热更新（AssetBundle+Lua）
+title: 【Unity】热更新
 date: 2024-08-30 15:24:51
 tags: 
 - Unity
@@ -11,11 +11,17 @@ categories:
 
 
 
-# AssetBundle
 
-## 1 打包面板信息
 
-### 1.1 AB包的压缩格式
+
+
+# 资源管理
+
+## AssetBundle
+
+### 1 打包面板信息
+
+#### 1.1 AB包的压缩格式
 
 - LZMA
   - 默认压缩方式，能使压缩文件达到最小。但由于其压缩方式是基于整个AssetBundle的数据流实现的，因此在对其解压时需将整个流进行解压。
@@ -26,7 +32,7 @@ categories:
 
 ![image-20240830161446971](【Unity】热更新/image-20240830161446971.png)
 
-### 1.2 AB包生成的文件
+#### 1.2 AB包生成的文件
 
 - 对应资源的文件
   - 资源AB包
@@ -37,7 +43,7 @@ categories:
   - 主包
   - manifest文件：记录AB包之间的依赖信息
 
-## 2 加载AB包
+### 2 加载AB包
 
 ```c#
 using System.Collections;
@@ -143,6 +149,12 @@ public class ABLoadManager : SingletonMono<ABLoadManager>
     }
 }
 ```
+
+
+
+## Addressable
+
+Addressable是在AssetBundle基础上实现的，详细用法：[参考](https://zhuanlan.zhihu.com/p/635796583)
 
 # XLua
 
