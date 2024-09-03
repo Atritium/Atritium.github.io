@@ -212,7 +212,9 @@ Lua会在调用`require("Lua文件名")`时依次访问目前所有的文件加�
 
 访问 自定义加载规则1->自定义加载规则2->...->默认加载规则。
 
-### 1.3 获取全局变量
+### 1.3 luaEnv.Global
+
+#### 1.3.1 获取全局变量
 
 ```c#
 //得到Lua中的大G表
@@ -224,17 +226,17 @@ public LuaTable Global{
 
 private void Start(){
     //虽然Lua中的数值类型只有Number一种，但我们可以根据具体的数值，在拿到C#里的时候进行转换，如下
-    var i = Global.Get<int>("textNumber");
-    Global.Set("textNumber",55);
+    var i = Global.Get<int>("testNumber");
+    Global.Set("testNumber",55);
 }
 ```
 
-### 1.4 获取全局函数
+#### 1.3.2 获取全局函数
 
 **lua文件**
 
 ```lua
-textFun = function()
+testFun = function()
 	print("Hello,World!")
 end
 ```
@@ -252,12 +254,14 @@ public LuaTable Global{
 public delegate void CustomCall();
 private void Start(){
     //1.自定义委托/C#自带委托Action&Func/UnityAction
-	var call = Global.Get<CustomCall>("textFun");
+	var call = Global.Get<CustomCall>("testFun");
 	call();
     
-    //2.XLua提供的方法
-    var lf = Global.Get<LuaFunction>("textFun");
+    //2.XLua提供的方法（不建议使用）
+    var lf = Global.Get<LuaFunction>("testFun");
     lf.Call();
+    //如果没有定期回收的话，需要手动释放，防止内存泄露，因为LuaFunction持有Lua虚拟机里的引用
+    lf.Dispose();   
 }
 ```
 
@@ -268,4 +272,152 @@ private void Start(){
 [CSharpCallLua]
 public delegate int CustomCall(int num);
 ```
+
+#### 1.3.3 获取List/Dictionary
+
+**lua文件**
+
+```lua
+--List
+testList1 = {1,2,3,4,5}
+testList2 = {1,"123",true}
+
+--Dictionary
+testDict1 = {
+	["1"] = 1,
+	["2"] = 2,
+	["3"] = 3,
+	["4"] = 4,
+}
+testDict2 = {
+	["1"] = 1,
+	[true] = 1,
+	[false] = true,
+	["123"] = false,
+}
+```
+
+**C#文件**
+
+```c#
+//得到Lua中的大G表
+public LuaTable Global{
+	get{
+		return luaEnv.Global;
+	}
+}
+//值拷贝/浅拷贝：不会改变lua中的内容
+var list1 = Global.Get<List<int>>("testList1");
+var list2 = Global.Get<List<object>>("testList2");
+var dict1 = Global.Get<Dictionary<string,int>>("testDict1");
+var dict2 = Global.Get<Dictionary<object,object>>("testDict2");
+```
+
+#### 1.3.4 获取类
+
+**lua文件**
+
+```lua
+testClass = {
+	testInt = 2,
+	testBool = true,
+	testString = "123",
+	testFun = function()
+    	print("Hello,World!")
+     end
+}
+```
+
+**C#文件**
+
+```c#
+public class CallLuaClass{
+	//在这个类中声明成员变量，名字一定要和Lua里声明的一样
+	public int testInt;
+	public bool testBool;
+	public string testString;
+	public UnityAction testFun;
+	
+	//这个自定义类中的变量可以比Lua中更多也可以更少
+}
+public class Program{
+	//...
+	var obj = Global.Get<CallLuaClass>("testClass");
+}
+```
+
+#### 1.3.5 获取接口
+
+**lua文件**
+
+```lua
+testInterface = {
+	testInt = 2,
+	testBool = true,
+	testString = "123",
+	testFun = function()
+    	print("Hello,World!")
+     end
+}
+```
+
+**C#文件**
+
+```c#
+//接口中不允许写成员变量，但可以写属性
+[CSharpCallLua]
+public interface ICallLuaInterface{
+	int testInt{
+		get;
+		set;
+	}
+	bool testBool{
+		get;
+		set;
+	}
+	string testString{
+		get;
+		set;
+	}
+	UnityAction testFun{
+		get;
+		set;
+	}
+    
+    //这个自定义接口中的变量可以比Lua中更多也可以更少，和上面类的规则一样
+}
+public class Program{
+	//...
+    //这里是引用拷贝！！！
+	var obj = Global.Get<ICallLuaInterface>("testInterface");
+}
+```
+
+#### 1.3.5 获取LuaTable
+
+**lua文件**
+
+```lua
+test = {
+	testInt = 2,
+	testBool = true,
+	testString = "123",
+	testFun = function()
+    	print("Hello,World!")
+     end
+}
+```
+
+**C#文件**
+
+```c#
+//引用拷贝！！
+var luaTable = Global.Get<LuaTable>("test");
+Debug.Log(luaTable.Get<int>("testInt"));
+
+//如果没有定期回收，需要手动释放以防止内存泄漏，不建议使用
+luaTable.Dispose();
+```
+
+## 2 Lua调用C#
 
