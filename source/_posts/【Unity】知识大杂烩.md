@@ -46,21 +46,13 @@ categories:
 
 绕三个轴旋转的旋转矩阵：
 $$
-Rx(θ) = \begin{bmatrix} 1&0&0 \\ 0&cosθ&sinθ \\ 0&-sinθ&cosθ \end{bmatrix}
+Rx(θ) = \begin{bmatrix} 1&0&0 \\ 0&cos(θ)&-sin(θ)\\0&sin(θ)&cos(θ) \end{bmatrix} Ry(θ) = \begin{bmatrix} cos(θ)&0&sin(θ) \\ 0&1&0\\-sin(θ)&0&cos(θ) \end{bmatrix} Rz(θ) = \begin{bmatrix} cos(θ)&-sin(θ)&0 \\ sin(θ)&cos(θ)&0\\0&0&1 \end{bmatrix}
+$$
+然后，我们计算绕x轴旋转α度，绕y轴旋转90°，绕z轴旋转β度的总变换矩阵：
 
-Ry(θ) = \begin{bmatrix} cosθ&0&-sinθ \\ 0&1&0 \\sinθ&0&cosθ \end{bmatrix}
+![image-20240903102729324](【Unity】知识大杂烩/image-20240903102729324.png)
 
-Rz(θ) = \begin{bmatrix} cosθ&sinθ&0 \\ -sinθ&cosθ&0\\0&0&1 \end{bmatrix}
-$$
-当y轴旋转90°，y轴的旋转矩阵则变为：
-$$
-Ry(θ) = \begin{bmatrix} 0&0&-1 \\ 0&1&0 \\1&0&0 \end{bmatrix}
-$$
-那么总的变换矩阵可以计算：
-$$
-Rx(θ)Ry(90°)Rz(θ) = \begin{bmatrix} 0&0&-1 \\ sin(θx-θz)&cos(θx-θz)&0 \\cos(θx-θz)&-sin(θx-θz)&0 \end{bmatrix}
-$$
-从最终的变换矩阵可以看出来，结果只受x和z两个维度控制。
+该矩阵可以转换为最后一行，即绕x轴旋转（α-β）度，绕y轴旋转90度的旋转矩阵，z轴自由度丢失。
 
 ### 1.2 四元数是什么？
 
