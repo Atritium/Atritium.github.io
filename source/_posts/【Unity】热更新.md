@@ -166,7 +166,7 @@ Addressable是在AssetBundle基础上实现的，详细用法：[参考](https:/
 
 # XLua
 
-## 1 C#调用Lua
+## 1 CSharp调用Lua
 
 ### 1.1 Lua解析器
 
@@ -419,5 +419,167 @@ Debug.Log(luaTable.Get<int>("testInt"));
 luaTable.Dispose();
 ```
 
-## 2 Lua调用C#
+## 2 Lua调用CSharp
 
+Lua没有办法直接访问C#，所以一定是先从C#调用Lua后，才把核心逻辑交给Lua来编写。
+
+```c#
+public class Main : MonoBehaviour{
+	private void Start(){
+		//这里调用了一个已经写好的Lua管理器
+		LuaManager.GetInstance().Init();
+		LuaManager.GetInstance().DoLuaFile("Main");
+	}
+}
+```
+
+### 2.1 Lua调用C#类
+
+- Lua调用C#类
+  - Unity自带类&C#自定义类
+    - CS.命名空间.类
+      - `CS.UnityEngine.GameObject`
+      - 实例化类对象：`local obj = CS.UnityEngine.GameObject("名字")`
+      - 为了节约性能&简便，可以在Lua里使用全局变量对一些C#类进行声明，如`GameObject = CS.UnityEngine.GameObject`
+  - Mono类
+    - 不能用new实例化，需要用组件挂载的方式，但xLua不支持AddComponent<泛型>()这种无参泛型模式，因此使用另一个重载：AddComponent(Type t)
+    - `obj.AddComponent(typeof(Mono类名))`
+- Lua调用类对象
+  - 静态方法和变量
+    - 使用 . 进行调用
+    - `local obj = GameObject.Find("名字")`
+  - 成员变量
+    - 实例化的对象.变量名
+    - `obj.transform.location`
+  - **成员方法**
+    - 实例化的对象:方法名
+
+### 2.2 Lua调用C#枚举
+
+和类的调用规则一样：`CS.命名空间.枚举名.枚举成员`
+
+其他需要注意的：
+
+```lua
+--枚举的转换
+--假设C#里我们自定义了一个枚举E_MyEnum
+E_MyEnum = CS.E_MyEnum
+local c = E_MyEnum.Idle
+
+--数值转枚举
+local a = E_MyEnum.__CastFrom(1)
+--字符串转枚举
+local b = E_MyEnum.__CastFrom("Idle"
+```
+
+### 2.3 Lua调用C# Array/list/Dictionary
+
+**C#**
+
+```c#
+public class Test{
+	public int[] array = new int[5]{1,2,3,4,5};
+	public List<int> list = new List<int>();
+	public Dictionary<int,string> dict = new Dictionary<int,string>();
+}
+```
+
+**Lua**
+
+**Array**
+
+```lua
+local obj = CS.Test()
+
+--Lua使用数组，C#里怎么用Lua里就怎么用
+print(obj.array.Length)
+print(obj.array[0])
+
+--遍历也要按C#的规则来：索引从0开始
+for i=0,obj.array.Length-1 do
+	print(obj.array[i])
+end
+
+--在lua中创建一个C#的数组，使用Array类提供的静态方法即可
+local array = CS.System.Array.CreateInstance(typeof(CS.System.Int32),10)
+```
+
+**List**
+
+```lua
+local obj = CS.Test()
+
+--添加元素
+obj.list:Add(1)
+obj.list:Add(2)
+obj.list:Add(3)
+
+--遍历
+for i=0,obj.list.Count-1 do
+	print(i)
+end
+
+--在lua中创建一个C#的list
+local List_String = CS.System.Collections.Generic.List(CS.System.String)
+local list = List_String()
+list.Add(111)
+```
+
+**Dictionary**
+
+```lua
+local obj = CS.Test()
+
+--添加元素
+obj.dict:Add(1,"123")
+
+--遍历
+for k,v in pairs(obj.dict) do
+	print(k,v)
+end
+
+--在lua中创建一个C#的Dictionary<string,Vector3>
+local Dic_String_Vector3 = CS.System.Collections.Generic.Dictionary(CS.System.String,CS.UnityEngine.Vector3)
+local dict = Dic_String_Vector3()
+dict:Add("123",CS.UnityEngine.Vector3.right)
+
+--**在lua中创建的dict获取值
+print(dict:get_Item("123"))
+dict.set_Item("123",nil)
+```
+
+### 2.4 Lua使用C#拓展方法
+
+C#拓展方法是一种允许你为现有的类型添加新方法，而无需修改原类型代码或创建子类的功能。扩展方法看起来就像是目标类型的实例方法一样调用，但实际上它是一个静态方法。它的核心目的是为已定义的类（包括.NET框架的内置类型或第三方库中的类）增加功能，而无需修改或继承该类。
+
+特点：
+
+- **静态方法**：扩展方法实际上是定义在静态类中的静态方法。
+- **`this` 关键字**：扩展方法的第一个参数前加上 `this` 关键字，表示该方法是扩展到这个类型的。
+
+定义：
+
+```c#
+public static class StringExtensions
+{
+    // 扩展方法，添加到 string 类型
+    public static string Reverse(this string str)
+    {
+        char[] charArray = str.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
+    }
+}
+```
+
+使用：
+
+```c#
+string example = "Hello";
+string reversed = example.Reverse();  // 调用扩展方法
+Console.WriteLine(reversed);          // 输出 "olleH"
+```
+
+要在lua中调用C#的拓展方法，要在声明拓展方法的静态类前面加上：`[LuaCallCSharp]`，调用方法则和普通调用实例方法一致。
+
+另外，该特性可以提高lua访问C#的性能。
