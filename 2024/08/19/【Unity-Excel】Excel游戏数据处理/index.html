@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【Unity-Excel】Excel游戏数据处理 | manqi</title><meta name="author" content="manqi,atritium@163.com"><meta name="copyright" content="manqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="0 前言Excel数据处理是游戏开发中很常见的一个问题，这篇文章实现了：1.Excel数据转Json数据2.解析Excel生成对应C#类脚本，并提供读取Json数据存入字典的方法 Excel数据为什么要转Json数据（我自己的理解）：1.方便数据处理：Json有很多第三方库，提供了较为完善的Json数据解析方法，且性能较好。2.出于加载时的性能考虑：Json相比Excel更加轻量，文件体积较小，数">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【Unity-Excel】Excel游戏数据处理 | manqi</title><meta name="author" content="manqi,atritium@163.com"><meta name="copyright" content="manqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="0 前言Excel数据处理是游戏开发中很常见的一个问题，这篇文章实现了：1.Excel数据转Json数据2.解析Excel生成对应C#类脚本，并提供读取Json数据存入字典的方法 Excel数据为什么要转Json数据（我自己的理解）：1.方便数据处理：Json有很多第三方库，提供了较为完善的Json数据解析方法，且性能较好。2.出于加载时的性能考虑：Json相比Excel更加轻量，文件体积较小，数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Unity-Excel】Excel游戏数据处理">
 <meta property="og:url" content="http://atritium.github.io/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/index.html">
@@ -162,9 +162,9 @@
 <p>另外，可能需要的一些插件：（可以在网上找找，应该都有）</p>
 <img src="/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/image-20240819152547042.png" class="" title="image-20240819152547042">
 <h1 id="1-效果预览"><a href="#1-效果预览" class="headerlink" title="1 效果预览"></a>1 效果预览</h1><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><strong>Excel配置</strong></p>
-<p><style>.pkwumgsrlral{zoom:67%;}</style><img src="/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/image-20240819155525986.png" class="pkwumgsrlral" alt="image-20240819155525986"></p>
+<p><style>.ssskhxdtyrwe{zoom:67%;}</style><img src="/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/image-20240819155525986.png" class="ssskhxdtyrwe" alt="image-20240819155525986"></p>
 <p><strong>使用方法</strong><br>右键Excel文件或者在右键文件夹（转换文件夹下的所有Excel文件）</p>
-<p><style>.xrvquxpehobg{zoom: 80%;}</style><img src="/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/image-20240819155545938.png" class="xrvquxpehobg" alt="image-20240819155545938"></p>
+<p><style>.oqnsuvygkbxx{zoom: 80%;}</style><img src="/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/image-20240819155545938.png" class="oqnsuvygkbxx" alt="image-20240819155545938"></p>
 <h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><strong>CSharp类</strong></p>
 <img src="/2024/08/19/%E3%80%90Unity-Excel%E3%80%91Excel%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/2e247983e24c4ae39e278088eb30c93c.png" class="" title="在这里插入图片描述">
 <p><strong>JsonData</strong></p>
