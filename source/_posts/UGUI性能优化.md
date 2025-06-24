@@ -1,12 +1,13 @@
 ---
 title: UGUI性能优化
 date: 2025-06-24 17:34:25
-tags:
+tags: 
+- Unity
+- UGUI
+categories: 
+- Unity
+description: 在公司项目里接触最多的就是UGUI，因此也负责了一部分UGUI优化相关的工作，在此进行记录。
 ---
-
-
-
-在公司项目里接触最多的就是UGUI，因此也负责了一部分UGUI优化相关的工作，在此进行记录。
 
 # 减少Draw Call
 
