@@ -23,12 +23,33 @@ menu:
 # Code Blocks (代碼相關)
 # --------------------------------------
 
-highlight_theme: pale night #  darker / pale night / light / ocean / mac / mac light / false
-highlight_copy: true # copy button
-highlight_lang: true # show the code language
-highlight_shrink: false # true: shrink the code blocks / false: expand the code blocks | none: expand code blocks and hide the button
-highlight_height_limit: false # unit: px
-code_word_wrap: false
+# Code Blocks (代碼相關)
+# --------------------------------------
+
+highlight_theme: pale night   # 代码高亮主题，可选：
+                              # darker / pale night / light / ocean / mac / mac light / false（关闭高亮）
+
+highlight_copy: true          # 是否显示右上角“复制”按钮（推荐开启）
+
+highlight_lang: true          # 是否在代码块左上角显示语言名称（如 csharp、javascript）
+
+highlight_shrink: false       # 代码块默认展开/折叠
+                              # false：默认展开
+                              # true：默认折叠
+                              # none：默认展开且隐藏折叠按钮
+
+highlight_height_limit: false # 代码块最大高度限制（超过后出现滚动条），单位 px
+                              # 示例：400（限制 400px 高）
+
+code_word_wrap: false         # 是否自动换行（长代码不横向滚动）
+                              # false：横向滚动条（推荐，保持代码整洁）
+                              # true：自动换行
+
+line_number: false            # 是否显示行号（关键项！）
+                              # true：显示行号（现代样式，紧贴左侧，不会大缩进）
+                              # false：关闭行号（代码更左对齐、更简洁）
+
+tab_replace: ''               # 可选：用空格替换 Tab（如果有需要）
 
 # Social Settings (社交圖標設置)
 # formal:
