@@ -44,17 +44,20 @@ render_drafts: false
 post_asset_folder: true
 relative_link: false
 future: true
-# syntax_highlighter: highlight.js
-# highlight:
-#   line_number: true
-#   auto_detect: false
-#   tab_replace: ''
-#   wrap: true
-#   hljs: false
-# prismjs:
-#   preprocess: true
-#   line_number: true
-#   tab_replace: ''
+
+# --- 修改后的代码高亮配置 ---
+syntax_highlighter: highlight.js
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: false
+  tab_replace: '    '  # 这里将 Tab 替换为 4 个空格
+  wrap: true
+  hljs: false
+
+prismjs:
+  enable: false        # 确保 prismjs 关闭，避免冲突
+# ---------------------------
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
