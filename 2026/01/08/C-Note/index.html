@@ -1,0 +1,445 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C#程序员不得不品的一些C++笔记 | manqi</title><meta name="author" content="manqi,atritium@163.com"><meta name="copyright" content="manqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="0 前言 C++属于我一直想学但总是“望而生畏”的那种类型，毕竟业界传闻C++是最难的编程语言……加上平时工作上也用不着C++（平时工作主Unity开发，一般都用C#），所以就更给了自己理由拖延学习计划。 但离职之后我开始思考之后的发展方向，也浏览了网上一些游戏开发岗的JD，感觉从长远发展来说，会C++一定是成为一个优秀游戏程序员的必要条件之一（你家Unity底层都是用C++写的你还有什么可说">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#程序员不得不品的一些C++笔记">
+<meta property="og:url" content="http://atritium.github.io/2026/01/08/C-Note/index.html">
+<meta property="og:site_name" content="manqi">
+<meta property="og:description" content="0 前言 C++属于我一直想学但总是“望而生畏”的那种类型，毕竟业界传闻C++是最难的编程语言……加上平时工作上也用不着C++（平时工作主Unity开发，一般都用C#），所以就更给了自己理由拖延学习计划。 但离职之后我开始思考之后的发展方向，也浏览了网上一些游戏开发岗的JD，感觉从长远发展来说，会C++一定是成为一个优秀游戏程序员的必要条件之一（你家Unity底层都是用C++写的你还有什么可说">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://atritium.github.io/img/HeadIcon.jpg">
+<meta property="article:published_time" content="2026-01-08T12:38:14.000Z">
+<meta property="article:modified_time" content="2026-01-09T09:50:05.203Z">
+<meta property="article:author" content="manqi">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://atritium.github.io/img/HeadIcon.jpg"><link rel="shortcut icon" href="/img/HeadIcon.jpg"><link rel="canonical" href="http://atritium.github.io/2026/01/08/C-Note/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C#程序员不得不品的一些C++笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-01-09 17:50:05'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/HeadIcon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/pageBg1.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="manqi"><span class="site-name">manqi</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C#程序员不得不品的一些C++笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-08T12:38:14.000Z" title="发表于 2026-01-08 20:38:14">2026-01-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-09T09:50:05.203Z" title="更新于 2026-01-09 17:50:05">2026-01-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C#程序员不得不品的一些C++笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言">0 前言</h1>
+<p>C++属于我一直想学但总是“望而生畏”的那种类型，毕竟业界传闻C++是最难的编程语言……加上平时工作上也用不着C++（平时工作主Unity开发，一般都用C#），所以就更给了自己理由拖延学习计划。</p>
+<p>但离职之后我开始思考之后的发展方向，也浏览了网上一些游戏开发岗的JD，感觉从长远发展来说，会C++一定是成为一个优秀游戏程序员的必要条件之一（你家Unity底层都是用C++写的你还有什么可说的），于是痛下决心开始学习。</p>
+<p>这篇文章记录一些学习C++过程中学到的新知识（学习过程中我也发现其实从一个语言的设计目的出发就很容易理解一个东西为什么要这么设计）。</p>
+<h1 id="数据类型">1 数据类型</h1>
+<p>C++ 的某些类型大小依赖实现/平台，而C#（.NET
+规范）的数据类型大小是固定不变的（跨平台一致），这里列出两个语言数据类型的关键区别。</p>
+<h2 id="longlong-long">1.1 long/long long</h2>
+<ul>
+<li>C++：long大小依赖于平台（通常4字节，可能8字节），long long固定8字节
+<ul>
+<li><strong>Windows (LLP64
+模型)</strong>：long是4字节，即使在64-bit系统上</li>
+<li><strong>Unix/Linux/Mac (LP64 模型)</strong>：long是8字节</li>
+</ul></li>
+<li>C#：long=8 字节，没有 long long</li>
+</ul>
+<p>现代推荐：用固定大小类型，保证跨平台一致。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdint&gt;</span></span></span><br><span class="line">std::<span class="type">int32_t</span> i32;    <span class="comment">// 固定 32-bit（代替 int/long 在 Windows）</span></span><br><span class="line">std::<span class="type">int64_t</span> i64;    <span class="comment">// 固定 64-bit（代替 long long，或 Unix 的 long）</span></span><br></pre></td></tr></table></figure>
+<h2 id="char">1.2 char</h2>
+<ul>
+<li>C++
+char永远1字节，支持ASCII（英文+基本符号），如果是一个中文的话，占3~4char
+<ul>
+<li>C++还有宽字符（wchar_t，大小2字节或4字节，平台差异）</li>
+</ul></li>
+<li>C# char始终2字节，专为存储一个Unicode字符设计，中文只占1char</li>
+</ul>
+<h2 id="cdecimal">1.3 C#：decimal</h2>
+<p>C# 独有，高精度小数（金融/货币计算必备），C++ 无</p>
+<h2 id="c指针">1.4 C++：指针</h2>
+<p>指针是C++的核心特性，可以通过它间接访问内存，所有类型的指针在32bit下是四字节，64bit下是8字节。</p>
+<h3 id="基础使用">1.4.1 基础使用</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span>* p;  </span><br><span class="line">p = &amp;a;          <span class="comment">//$是取址符号</span></span><br><span class="line">cout&lt;&lt;*p&lt;&lt;endl;  <span class="comment">//再加一个*是解引用</span></span><br></pre></td></tr></table></figure>
+<h3 id="空指针野指针">1.4.2 空指针/野指针</h3>
+<p>空指针</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* p = <span class="literal">NULL</span>;   <span class="comment">//指针变量p指向内存地址编号为0的空间</span></span><br><span class="line">cout&lt;&lt;*p&lt;&lt;endl;  <span class="comment">//内存编号0~255为系统占用内存，不允许用户访问</span></span><br></pre></td></tr></table></figure>
+<p>野指针：指针变量指向非法的内存空间</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指向内存编号为0x1100的空间</span></span><br><span class="line"><span class="type">int</span>* p = (<span class="type">int</span>*)<span class="number">0x1100</span>;</span><br><span class="line">cout&lt;&lt;*p&lt;&lt;endl;  <span class="comment">//访问野指针报错</span></span><br></pre></td></tr></table></figure>
+<h3 id="const三种修饰指针的方式">1.4.3 const三种修饰指针的方式</h3>
+<p>常量指针</p>
+<ul>
+<li><code>const int* p</code></li>
+<li>不允许修改指针指向的值</li>
+</ul>
+<p>指针常量</p>
+<ul>
+<li><code>int* const p</code></li>
+<li>不允许修改指针的指向</li>
+</ul>
+<p>const既修饰指针又修饰常量</p>
+<ul>
+<li><code>const int* const p</code></li>
+<li>既不能修改指针指向的值，又不能修改指针的指向</li>
+</ul>
+<h1 id="数组">2 数组</h1>
+<p>C++ 和 C# 的数组在设计哲学上差异很大：C++
+数组更底层、灵活、高性能；C# 数组更安全、现代、托管。</p>
+<h2 id="原生数组">2.1 原生数组</h2>
+<p>C++</p>
+<ul>
+<li><p><code>int arr[10];</code></p></li>
+<li><p>C++原生数组可以存放在栈上，大小在编译时确定-栈分配需要编译器在生成函数栈帧时就知道确切大小</p></li>
+<li><p>C++原生数组不允许赋值操作，如<code>arr2 = arr1;</code></p>
+<ul>
+<li>C++原生数组名在表达式中几乎总是退化为指向首元素的指针，而赋值运算符需要左值对象完整语义</li>
+<li>编译器生成代码时，数组是连续内存块，如果允许赋值，编译器需要生成隐式逐元素拷贝代码，如果数组很大，开销不可控，而C++追求“零开销对象”</li>
+</ul></li>
+<li><p>C++原生数组的经典特性：<strong>数组退化</strong></p>
+<ul>
+<li><p>定义：在大多数表达式上下文中，数组名会自动退化为指向数组首元素的指针，从而丢失大小信息（这样做是为了效率：传整个数组内容开销大，传指针，64bit下只需要8字节）</p></li>
+<li><p>函数传参中的退化（最经典）：</p></li>
+<li><p>```c++ // 此时arr是指向数组首元素的指针 void func(int arr[]) {
+//sizeof(arr)，返回指针大小（64bit-8字节） } <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">C#</span><br><span class="line"></span><br><span class="line">- `int[] arr = new int[10];`</span><br><span class="line">- C#原生数组始终是引用类型，在托管堆上分配，大小在运行时确定 </span><br><span class="line">- C#原生数组允许赋值操作，本质上是引用拷贝（浅拷贝），`arr2`和`arr1`指向同一个数组对象（内容共享）</span><br><span class="line"></span><br><span class="line">## 2.2 C++：array</span><br><span class="line"></span><br><span class="line">C++11引入的模板类，是C++原生数组的现代包装。其设计目的是保留原生数组的高性能和栈分配优势，同时提供容器般的安全和便利性。</span><br><span class="line"></span><br><span class="line">```c++</span><br><span class="line">std::array&lt;int,5&gt; arr = &#123;5,4,3,2,1&#125;;</span><br></pre></td></tr></table></figure></p></li>
+</ul></li>
+</ul>
+<p><strong>解决数组退化</strong></p>
+<p>array在函数传参时可以按值/引用传递，不会退化为指针，丢失大小信息（array类自带数量参数）。</p>
+<p>如何按引用传递：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//值传递（拷贝一份数据）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(std::array&lt;<span class="type">int</span>, <span class="number">10</span>&gt; arr)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//引用传递（不用拷贝一份数据，性能较好）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func_mod</span><span class="params">(std::array&lt;<span class="type">int</span>, <span class="number">10</span>&gt;&amp; arr)</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>允许赋值操作</strong></p>
+<p>支持<code>arr2=arr1;</code>本质上是值拷贝。</p>
+<h2 id="动态数组">2.3 动态数组</h2>
+<p>严格来说，这部分不算数组，因为数组的大小是固定，不可变的。</p>
+<h3 id="cvector">2.3.1 C++：vector</h3>
+<h4 id="push_back和emplace_back">1 push_back()和emplace_back()</h4>
+<p>两者都是std::vector用于在容器末尾添加元素的成员函数，但它们在构造方式和效率上有很多区别，emplace_back()
+是 C++11 引入的，更现代、更高效的版本。</p>
+<p><strong>push_back</strong></p>
+<ul>
+<li>接受一个已经构造好的对象，通过拷贝或移动整个对象到vector末尾</li>
+</ul>
+<p><strong>emplace_back</strong></p>
+<ul>
+<li>接受构造函数的参数，在vecor末尾就地构造一个新T对象，直接调用T的构造函数，避免了临时对象的拷贝/移动</li>
+</ul>
+<h4 id="size和capacity">2 size()和capacity()</h4>
+<p>size()表示的是当前数组内元素的数量，而capacity()表示的是数组的容量，因此capacity()总是&gt;=size()。</p>
+<p>为什么 capacity &gt;= size()，且通常 &gt; size()？</p>
+<p><strong>核心原因：性能优化</strong></p>
+<ul>
+<li>vector 内部用连续内存块存储元素（像动态数组）</li>
+<li>添加元素时，如果 capacity 不足，会：
+<ul>
+<li>分配新更大内存块</li>
+<li>拷贝/移动旧元素到新块</li>
+<li>释放旧块</li>
+</ul></li>
+<li>解决方案：扩容时<strong>故意多分配</strong>（capacity &gt; 新
+size），留余量
+<ul>
+<li>下几次添加只增加 size（O(1)），无需扩容</li>
+</ul></li>
+</ul>
+<h4 id="下标操作符和at">3 下标操作符[]和at()</h4>
+<p>均用于元素访问，但[]没有边界检查，越界时会触发未定义行为，而at()有边界检查（C#里[]自带边界检查）。</p>
+<h4 id="vector的两种创建方式">4 vector的两种创建方式</h4>
+<p><strong>栈上声明</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;int&gt; vec;</span><br><span class="line">vec.push_back(10);</span><br></pre></td></tr></table></figure>
+<p>内存位置</p>
+<ul>
+<li>vector对象本身（控制块：_data 指针、size、capacity...）：栈上</li>
+<li>元素数据（实际int数组）：堆上</li>
+</ul>
+<p>释放：自动</p>
+<ul>
+<li>函数结束，vec析构-自动delete[]内部数据</li>
+</ul>
+<p><strong>用new创建（不推荐）</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt;* vec = <span class="keyword">new</span> std::<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;();  <span class="comment">//用new返回的是指针</span></span><br><span class="line">vec-&gt;<span class="built_in">push_back</span>(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> vec;   <span class="comment">//必须手动delete！</span></span><br></pre></td></tr></table></figure>
+<p>内存位置</p>
+<ul>
+<li>vector对象本身：堆上（由new分配）</li>
+<li>元素数据：堆上</li>
+<li>vec指针变量：如果为局部变量，栈上</li>
+</ul>
+<h3 id="clist">2.3.2 C#：List</h3>
+<p>略</p>
+<h1 id="内存分区">3 内存分区</h1>
+<p>C++程序在执行时，将内存大方向划分为<strong>4个区域</strong></p>
+<ul>
+<li>代码区
+<ul>
+<li>存储可执行机器代码（编译后的函数指令）</li>
+<li>只读：防止修改</li>
+<li>共享：对于频繁被执行的程序，只需要在内存中有一份代码即可</li>
+<li>大小固定，程序加载时分配</li>
+</ul></li>
+<li>常量区/数据段
+<ul>
+<li>常量区存放常量，数据段存放全局/静态变量</li>
+<li>常量区只读，数据段可读写</li>
+<li>大小固定</li>
+</ul></li>
+<li>栈区
+<ul>
+<li>由编译器自动分配释放, 存放函数的参数值，局部变量等</li>
+<li>从高地址向低地址增长（快速）</li>
+<li>大小固定，通常几MB，容易栈溢出</li>
+</ul></li>
+<li>堆区
+<ul>
+<li>用于动态分配内存，从低地址往高地址增长（与栈相反）</li>
+<li>大小不固定，运行时动态扩展</li>
+<li>C++中可使用new/malloc分配内存</li>
+</ul></li>
+</ul>
+<h1 id="引用">4 引用</h1>
+<ul>
+<li><p>引用的作用是给变量起个别名，由于设计目的如此，因此必须在声明时进行初始化</p>
+<ul>
+<li>```c++ int a = 10; int &amp;b = a; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 引用本质上是一个指针常量，因此不允许重新赋值（修改指针常量指向）</span><br><span class="line"></span><br><span class="line">- 引用做函数参数，可以简化使用指针修改实参</span><br><span class="line"></span><br><span class="line">  - ```c++</span><br><span class="line">    //1.值传递</span><br><span class="line">    void mySwap01(int a, int b) &#123;</span><br><span class="line">        int temp = a;</span><br><span class="line">        a = b;</span><br><span class="line">        b = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //2.地址传递</span><br><span class="line">    void mySwap02(int* a, int* b) &#123;</span><br><span class="line">        int temp = *a;</span><br><span class="line">        *a = *b;</span><br><span class="line">        *b = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //3.引用传递</span><br><span class="line">    void mySwap03(int&amp; a, int&amp; b) &#123;</span><br><span class="line">        int temp = a;</span><br><span class="line">        a = b;</span><br><span class="line">        b = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //通过引用参数产生的效果同按地址传递是一样的。引用的语法更清楚简单</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+</ul>
+<h1 id="类和对象">5 类和对象</h1>
+<h2 id="对象的初始化">5.1 对象的初始化</h2>
+<p>可以用初始化列表的方式初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c) :<span class="built_in">m_A</span>(a), <span class="built_in">m_B</span>(b), <span class="built_in">m_C</span>(c) &#123;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_A;</span><br><span class="line">    <span class="type">int</span> m_B;</span><br><span class="line">    <span class="type">int</span> m_C;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="友元">5.2 友元</h2>
+<p>设计目的是允许部分外部函数或类访问类内的私有属性，关键字为friend。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Building</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="type">void</span> <span class="title">method</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="模板">6 模板</h1>
+<p>函数模板作用：建立一个通用函数，其函数返回值类型和形参类型可以不具体制定，用一个<strong>虚拟的类型</strong>来代表。</p>
+<h2 id="函数模板">6.1 函数模板</h2>
+<h3 id="语法">6.1.1 语法</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">mySwap</span><span class="params">(T&amp; a, T&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    T temp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="普通函数和函数模板的调用规则">6.1.2
+普通函数和函数模板的调用规则</h3>
+<p>规则如下</p>
+<ul>
+<li>如果函数模板和普通函数都可以实现，优先调用普通函数</li>
+<li>可以通过空模板参数列表来强制调用函数模板</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//普通函数与函数模板调用规则</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myPrint</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;调用的普通函数&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myPrint</span><span class="params">(T a, T b)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;调用的模板&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//1、如果函数模板和普通函数都可以实现，优先调用普通函数</span></span><br><span class="line">    <span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> b = <span class="number">20</span>;</span><br><span class="line">    <span class="built_in">myPrint</span>(a, b); </span><br><span class="line"></span><br><span class="line">    <span class="comment">//2、可以通过空模板参数列表来强制调用函数模板</span></span><br><span class="line">    myPrint&lt;&gt;(a, b); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="模板的特化">6.1.3 模板的特化</h3>
+<p>例如像下面代码，如果传入的a和b是一个数组，就无法实现了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(T a, T b)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    a = b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C++为了解决这种问题，提供模板的特化，可以为这些特定的类型提供具体化的模板。</p>
+<p><strong>注意</strong>：函数模板只支持<strong>全特化</strong>（template&lt;&gt;），不支持偏特化（partial
+specialization）。</p>
+<p>C++</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>(string name, <span class="type">int</span> age)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;m_Name = name;</span><br><span class="line">        <span class="keyword">this</span>-&gt;m_Age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    string m_Name;</span><br><span class="line">    <span class="type">int</span> m_Age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//普通函数模板</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">myCompare</span><span class="params">(T&amp; a, T&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (a == b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//具体化函数模板</span></span><br><span class="line"><span class="keyword">template</span>&lt;&gt; <span class="function"><span class="type">bool</span> <span class="title">myCompare</span><span class="params">(Person &amp;p1, Person &amp;p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ( p<span class="number">1.</span>m_Name  == p<span class="number">2.</span>m_Name &amp;&amp; p<span class="number">1.</span>m_Age == p<span class="number">2.</span>m_Age)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="类模板">6.2 类模板</h2>
+<p>很多通用容器如<code>std::vector&lt;T&gt;</code>都是基于类模板实现的。</p>
+<h3 id="语法-1">6.2.1 语法</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    T data;  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">MyClass</span>(T value) : <span class="built_in">data</span>(value) &#123;&#125; </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; data &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="function">MyClass&lt;<span class="type">int</span>&gt; <span class="title">intObj</span><span class="params">(<span class="number">42</span>)</span></span>;      </span><br><span class="line">    <span class="function">MyClass&lt;<span class="type">double</span>&gt; <span class="title">doubleObj</span><span class="params">(<span class="number">3.14</span>)</span></span>;</span><br><span class="line">    <span class="function">MyClass&lt;std::string&gt; <span class="title">strObj</span><span class="params">(<span class="string">&quot;hello&quot;</span>)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>默认模板参数：int</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyClass&lt;&gt; obj;  <span class="comment">//等价 MyClass&lt;int&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="模板的特化-1">6.2.2 模板的特化</h3>
+<p>支持为某个类型特化模板（类模板支持全特化和偏特化）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//通用模板：处理普通类型</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>全特化</strong></p>
+<p>完全指定所有模板参数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//为 bool 全特化</span></span><br><span class="line"><span class="keyword">template</span> &lt;&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>&lt;<span class="type">bool</span>&gt; &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>偏特化</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 偏特化：匹配 T*（任何类型的指针）</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>&lt;T*&gt; &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://atritium.github.io">manqi</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://atritium.github.io/2026/01/08/C-Note/">http://atritium.github.io/2026/01/08/C-Note/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://atritium.github.io" target="_blank">manqi</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post_share"><div class="social-share" data-image="/img/HeadIcon.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2026/01/07/%E6%B5%85%E6%9E%90%E6%B8%B8%E6%88%8F%E5%90%8C%E6%AD%A5%E6%8A%80%E6%9C%AF/" title="浅析游戏同步技术：帧同步和状态同步"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">浅析游戏同步技术：帧同步和状态同步</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/HeadIcon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">manqi</div><div class="author-info__description">搞技术才是我的版本答案</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Atritium"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://space.bilibili.com/272498370" target="_blank" title="bilibili"><i class="fa-brands fa-bilibili" style="color: #24292e;"></i></a><a class="social-icon" href="https://www.gcores.com/users/456990/talks" target="_blank" title="机核"><i class="fa-solid fa-gamepad" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">技术文章删了一批，等待重新整理中。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">0 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">1 数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#longlong-long"><span class="toc-text">1.1 long&#x2F;long long</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#char"><span class="toc-text">1.2 char</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cdecimal"><span class="toc-text">1.3 C#：decimal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#c%E6%8C%87%E9%92%88"><span class="toc-text">1.4 C++：指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-text">1.4.1 基础使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E6%8C%87%E9%92%88%E9%87%8E%E6%8C%87%E9%92%88"><span class="toc-text">1.4.2 空指针&#x2F;野指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#const%E4%B8%89%E7%A7%8D%E4%BF%AE%E9%A5%B0%E6%8C%87%E9%92%88%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-text">1.4.3 const三种修饰指针的方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-text">2 数组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%94%9F%E6%95%B0%E7%BB%84"><span class="toc-text">2.1 原生数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84"><span class="toc-text">2.3 动态数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cvector"><span class="toc-text">2.3.1 C++：vector</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#push_back%E5%92%8Cemplace_back"><span class="toc-text">1 push_back()和emplace_back()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#size%E5%92%8Ccapacity"><span class="toc-text">2 size()和capacity()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8B%E6%A0%87%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%92%8Cat"><span class="toc-text">3 下标操作符[]和at()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#vector%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%88%9B%E5%BB%BA%E6%96%B9%E5%BC%8F"><span class="toc-text">4 vector的两种创建方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#clist"><span class="toc-text">2.3.2 C#：List</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA"><span class="toc-text">3 内存分区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E7%94%A8"><span class="toc-text">4 引用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1"><span class="toc-text">5 类和对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">5.1 对象的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8B%E5%85%83"><span class="toc-text">5.2 友元</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF"><span class="toc-text">6 模板</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF"><span class="toc-text">6.1 函数模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-text">6.1.1 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%B0%83%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-text">6.1.2
+普通函数和函数模板的调用规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%89%B9%E5%8C%96"><span class="toc-text">6.1.3 模板的特化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E6%A8%A1%E6%9D%BF"><span class="toc-text">6.2 类模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95-1"><span class="toc-text">6.2.1 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%89%B9%E5%8C%96-1"><span class="toc-text">6.2.2 模板的特化</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/08/C-Note/" title="C#程序员不得不品的一些C++笔记">C#程序员不得不品的一些C++笔记</a><time datetime="2026-01-08T12:38:14.000Z" title="发表于 2026-01-08 20:38:14">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/07/%E6%B5%85%E6%9E%90%E6%B8%B8%E6%88%8F%E5%90%8C%E6%AD%A5%E6%8A%80%E6%9C%AF/" title="浅析游戏同步技术：帧同步和状态同步">浅析游戏同步技术：帧同步和状态同步</a><time datetime="2026-01-07T08:34:51.000Z" title="发表于 2026-01-07 16:34:51">2026-01-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/24/UGUI%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="UGUI性能优化">UGUI性能优化</a><time datetime="2025-06-24T09:34:25.000Z" title="发表于 2025-06-24 17:34:25">2025-06-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/21/%E6%9E%97%E5%85%8B%E7%9A%84%E5%A4%A7%E9%80%86%E8%BD%AC%E7%89%B9%E8%BE%91/" title="我做的同人-林克的大逆转特辑">我做的同人-林克的大逆转特辑</a><time datetime="2025-04-20T16:00:00.000Z" title="发表于 2025-04-21 00:00:00">2025-04-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/17/Hello-Blog/" title="一些碎碎念">一些碎碎念</a><time datetime="2024-08-16T16:00:00.000Z" title="发表于 2024-08-17 00:00:00">2024-08-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By manqi</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><script>(() => {
+  const initGitalk = () => {
+    const gitalk = new Gitalk(Object.assign({
+      clientID: 'Ov23liGa3sa4gLFCWH3y',
+      clientSecret: '452c85b6dbdcf2685f5023d79c4fda4d6844948a',
+      repo: 'blog-comment',
+      owner: 'Atritium',
+      admin: ['Atritium'],
+      id: '7b199f83696ee83c751671f3c17f0382',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async() => {
+    if (typeof Gitalk === 'function') initGitalk()
+    else {
+      await getCSS('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.css')
+      await getScript('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js')
+      initGitalk()
+    }
+  }
+  
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
