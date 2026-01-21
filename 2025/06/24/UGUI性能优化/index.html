@@ -167,8 +167,8 @@ Debugger里，一个渲染调用称为Draw Mesh，通常就是一个Draw Call。
 <p>例外情况：当启用GPU
 Instancing时，多个相同网格的绘制可能合并为一个Draw Call，但在Frame
 Debugger中可能仍显示为多个"Draw Mesh"。</p>
-<style>.zyssecdhjune{zoom:50%;}</style>
-<img src="/2025/06/24/UGUI%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/image-20250624164104269.png" class="zyssecdhjune" alt="image-20250624164104269">
+<style>.tkzhwqhzlcel{zoom:50%;}</style>
+<img src="/2025/06/24/UGUI%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/image-20250624164104269.png" class="tkzhwqhzlcel" alt="image-20250624164104269">
 <p><strong>减少Draw Call</strong></p>
 <p>减少Draw
 Call即尽可能地进行合批，UI合批要求UI在同一个Canvas下，并拥有相同的材质（Material）和纹理（Texture），在Hierarchy里尽量相邻（如果两个满足合批条件的UI之间夹了一个不满足合批条件的UI，它们俩无法合批）。</p>
