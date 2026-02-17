@@ -53,7 +53,7 @@
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2026-02-13 21:07:28'
+  postUpdate: '2026-02-17 15:57:47'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -168,7 +168,7 @@
 一开始是在空间看到了任饭新春会的招募海报。
 往常这种同人制作活动，我是搭不上什么关系的，虽然很早就对做同人、做动画什么的挺感兴趣，但苦于自己没有什么才艺（画画啊Cos啊等等），也不懂视频制作，因此大部分时间下都只能默默远观。
 但这次却不一样，我定睛一看，怎么在招游戏程序啊！我没有多想，马上就扫描了二维码，生怕报名晚了没选上（后来我发现整个新春会制作组就我一个程序XD，然后就是被制作人们狠狠奴役了）。
-.fvbryhtcurqj{zoom:50%;}
+.mvcxcykxnknx{zoom:50%;}
 
 因为刚好在游戏行业，专业十分对口，我很快就通过了筛选。加入后我总算知道他们为什么要招募游戏程序。
 23年春节的时候，他们做了一个塞尔达版的逆转裁判，当时把视频制作的老师累得半死。于是第二年他们学聪明了，觉得像这种逆转like， ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/08/17/%E6%88%91%E5%81%9A%E7%9A%84%E6%B8%B8%E6%88%8F/" title="我做的游戏"><i class="fas fa-thumbtack sticky"></i>我做的游戏</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-08-16T16:00:00.000Z" title="发表于 2024-08-17 00:00:00">2024-08-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></span></div><div class="content">【毕业前的项目基本没有什么记录，所以这篇文章从毕业之后开始写。】
@@ -207,19 +207,18 @@ C++基础
 
 内存占用
 
-语义上不占空间
+逻辑上，引用只是对象的别名，不占用额外的内存空间
 
 对引用执行sizeof操作，得到的结果是它指向的原始变量的大小
 
 物理上
 
-引用在编译器内部通常被存储为类似常量指针的形式，当定义int &amp;r = i;，编译器内部：int* const p = &amp;i
-当引用作为局部变量时，编译器会将其直接优化掉，直接操作原始变量，因此没有内存开销
-当引用不作为局部变量，由于引用在编译器内部被存储为类似常量指针的形式，当定义in ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/01/26/%E5%9B%BE%E8%AE%BA/" title="图论">图论</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-01-26T08:24:54.000Z" title="发表于 2026-01-26 16:24:54">2026-01-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="content">0 前言
+当引用作为局部变量时，编译器会将其直接优化掉，所有对引用的操作，都会被优化为对它指向的原始变量的地址的操作，因此没有额外的内存开销
+当引用不作为局部变量，它在编译器内部通常被存储为类似常量指针的形式，当定义int &amp;r = i;，编译器内部会将其存储为int* c ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/01/26/%E5%9B%BE%E8%AE%BA/" title="图论">图论</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-01-26T08:24:54.000Z" title="发表于 2026-01-26 16:24:54">2026-01-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="content">0 前言
 参考视频
 1 图的存储
 1.1 邻接矩阵
-.ehkgnovigigd{zoom:80%;}
+.nfvjmveorotu{zoom:80%;}
 
 代码实现
 1int matrix[n][m]; 
@@ -312,7 +311,7 @@ Debugger里，一个渲染调用称为Draw Mesh，通常就是一个Draw Call。
 例外情况：当启用GPU
 Instancing时，多个相同网格的绘制可能合并为一个Draw Call，但在Frame
 Debugger中可能仍显示为多个"Draw Mesh"。
-.kcbtlvmdsibf{zoom:50%;}
+.zenqcpnvvgeo{zoom:50%;}
 
 减少Draw Call
 减少Draw
@@ -323,7 +322,7 @@ Call即尽可能地进行合批，UI合批要求UI在同一 ...</div></div></div
             </div>
             <ul class="card-category-list" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Unity/"><span class="card-category-list-name">Unity</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%90%8C%E4%BA%BA/"><span class="card-category-list-name">同人</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"><span class="card-category-list-name">碎碎念</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">计算机基础</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/"><span class="card-category-list-name">项目</span><span class="card-category-list-count">1</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/C/" style="font-size: 1.5em; color: #99a9bf">C++</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 1.1em; color: #999">项目</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 1.5em; color: #99a9bf">算法</a> <a href="/tags/%E5%90%8C%E4%BA%BA/" style="font-size: 1.1em; color: #999">同人</a> <a href="/tags/Unity/" style="font-size: 1.3em; color: #99a1ac">Unity</a> <a href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" style="font-size: 1.1em; color: #999">碎碎念</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/" style="font-size: 1.1em; color: #999">网络同步</a> <a href="/tags/AVL%E6%A0%91/" style="font-size: 1.1em; color: #999">AVL树</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 1.1em; color: #999">红黑树</a> <a href="/tags/UGUI/" style="font-size: 1.1em; color: #999">UGUI</a></div></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">10</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-02-13T13:07:28.476Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By manqi</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 1.5em; color: #99a9bf">算法</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/" style="font-size: 1.1em; color: #999">网络同步</a> <a href="/tags/UGUI/" style="font-size: 1.1em; color: #999">UGUI</a> <a href="/tags/AVL%E6%A0%91/" style="font-size: 1.1em; color: #999">AVL树</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 1.1em; color: #999">项目</a> <a href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" style="font-size: 1.1em; color: #999">碎碎念</a> <a href="/tags/Unity/" style="font-size: 1.3em; color: #99a1ac">Unity</a> <a href="/tags/C/" style="font-size: 1.5em; color: #99a9bf">C++</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 1.1em; color: #999">红黑树</a> <a href="/tags/%E5%90%8C%E4%BA%BA/" style="font-size: 1.1em; color: #999">同人</a></div></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">10</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-02-17T07:57:47.296Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By manqi</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
   init: (str) => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,

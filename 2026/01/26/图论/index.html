@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图论 | manqi</title><meta name="author" content="manqi,atritium@163.com"><meta name="copyright" content="manqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="0 前言 参考视频 1 图的存储 1.1 邻接矩阵 .ehkgnovigigd{zoom:80%;}  代码实现 1int matrix[n][m];  优点  容易判断两个顶点间是否有边 容易计算顶点的度  1.2 邻接表 12345&#x2F;&#x2F; 定义一个vector数组std::vector&lt;int&gt; adj[n];&#x2F;&#x2F;如果是带权图std::vector&lt;">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图论 | manqi</title><meta name="author" content="manqi,atritium@163.com"><meta name="copyright" content="manqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="0 前言 参考视频 1 图的存储 1.1 邻接矩阵 .nfvjmveorotu{zoom:80%;}  代码实现 1int matrix[n][m];  优点  容易判断两个顶点间是否有边 容易计算顶点的度  1.2 邻接表 12345&#x2F;&#x2F; 定义一个vector数组std::vector&lt;int&gt; adj[n];&#x2F;&#x2F;如果是带权图std::vector&lt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="图论">
 <meta property="og:url" content="http://atritium.github.io/2026/01/26/%E5%9B%BE%E8%AE%BA/index.html">
 <meta property="og:site_name" content="manqi">
-<meta property="og:description" content="0 前言 参考视频 1 图的存储 1.1 邻接矩阵 .ehkgnovigigd{zoom:80%;}  代码实现 1int matrix[n][m];  优点  容易判断两个顶点间是否有边 容易计算顶点的度  1.2 邻接表 12345&#x2F;&#x2F; 定义一个vector数组std::vector&lt;int&gt; adj[n];&#x2F;&#x2F;如果是带权图std::vector&lt;">
+<meta property="og:description" content="0 前言 参考视频 1 图的存储 1.1 邻接矩阵 .nfvjmveorotu{zoom:80%;}  代码实现 1int matrix[n][m];  优点  容易判断两个顶点间是否有边 容易计算顶点的度  1.2 邻接表 12345&#x2F;&#x2F; 定义一个vector数组std::vector&lt;int&gt; adj[n];&#x2F;&#x2F;如果是带权图std::vector&lt;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://atritium.github.io/img/HeadIcon.jpg">
 <meta property="article:published_time" content="2026-01-26T08:24:54.000Z">
@@ -159,8 +159,8 @@
 target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18C4y1A7JC?spm_id_from=333.788.videopod.sections&amp;vd_source=befd430066becbcfc1acfbc4c2c0749c">参考视频</a></p>
 <h1 id="图的存储">1 图的存储</h1>
 <h2 id="邻接矩阵">1.1 邻接矩阵</h2>
-<style>.ehkgnovigigd{zoom:80%;}</style>
-<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20260126163323373.png" class="ehkgnovigigd" alt="image-20260126163323373">
+<style>.nfvjmveorotu{zoom:80%;}</style>
+<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20260126163323373.png" class="nfvjmveorotu" alt="image-20260126163323373">
 <p><strong>代码实现</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> matrix[n][m]; </span><br></pre></td></tr></table></figure>
 <p><strong>优点</strong></p>
@@ -249,8 +249,8 @@ class="math inline">\(v\)</span>
 <li>所有顶点出现且只出现一次</li>
 <li>若存在一条A-&gt;B的路径，序列中A一定在B前面</li>
 </ul>
-<style>.nuxqdhvlwycw{zoom:80%;}</style>
-<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20260126210740604.png" class="nuxqdhvlwycw" alt="image-20260126210740604">
+<style>.exyqvyzvxsvn{zoom:80%;}</style>
+<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20260126210740604.png" class="exyqvyzvxsvn" alt="image-20260126210740604">
 <p>如何找拓扑排序：</p>
 <ul>
 <li>从图里选择一个没有前驱（入度为0）的顶点</li>
@@ -259,8 +259,8 @@ class="math inline">\(v\)</span>
 <p>每个有向无环图有一个或多个拓扑排序。</p>
 <h1 id="最小生成树">5 最小生成树</h1>
 <p>最小生成树使图联通并且所有边的权值之和最小。</p>
-<style>.xswwiygggfbg{zoom:100%;}</style>
-<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230104220908055.png" class="xswwiygggfbg" alt="image-20230104220908055">
+<style>.ldrrrvmfmqjp{zoom:100%;}</style>
+<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230104220908055.png" class="ldrrrvmfmqjp" alt="image-20230104220908055">
 <h2 id="prim算法">5.1 Prim算法</h2>
 <p>普利姆算法。</p>
 <ul>
@@ -295,16 +295,16 @@ dis[i][j] = Math.Min(dis[i][j],dis[i][k]+dis[k][j]);
 <h2 id="bellman-ford算法">6.2 Bellman-Ford算法</h2>
 <p>特点：单源算法，动态规划，可以处理负权边。</p>
 <p>松弛操作：只经过一条边可以到达哪些点。</p>
-<style>.tixmpbspajxf{zoom:80%;}</style>
-<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230105153750406.png" class="tixmpbspajxf" alt="image-20230105153750406">
+<style>.lbkdiutmxwon{zoom:80%;}</style>
+<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230105153750406.png" class="lbkdiutmxwon" alt="image-20230105153750406">
 <h2 id="dijkstra算法">6.3 Dijkstra算法</h2>
 <p>迪杰斯特拉算法。</p>
 <p>单源算法，不可以处理负权边，因为dijkstra的本质是贪心，如果出现负权边，那么已经完成过最短路径更新的点可能被推翻。</p>
 <p>不断选择离已经相连的点最近的点。</p>
-<style>.nwostopqvfdw{zoom:80%;}</style>
-<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230105154753180.png" class="nwostopqvfdw" alt="image-20230105154753180">
-<style>.ryobiusmfpxu{zoom:80%;}</style>
-<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230105154940211.png" class="ryobiusmfpxu" alt="image-20230105154940211">
+<style>.saslcnnhjlll{zoom:80%;}</style>
+<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230105154753180.png" class="saslcnnhjlll" alt="image-20230105154753180">
+<style>.lmytxdtxyihq{zoom:80%;}</style>
+<img src="/2026/01/26/%E5%9B%BE%E8%AE%BA/image-20230105154940211.png" class="lmytxdtxyihq" alt="image-20230105154940211">
 <h2 id="区别">6.4 区别</h2>
 <table>
 <colgroup>
