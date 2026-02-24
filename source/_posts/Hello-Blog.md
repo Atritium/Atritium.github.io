@@ -1,12 +1,12 @@
 ---
-title: 一些碎碎念
-date: 2024-08-17 
+title: 一些思考
+date: 2024-08
 top: 999
 tags: 
 - 碎碎念
 categories: 
 - 碎碎念
-description: 记录一些碎碎念
+description: 随意记录一些从脑袋里蹦出来的东西
 ---
 
 

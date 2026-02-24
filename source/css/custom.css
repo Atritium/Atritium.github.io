@@ -1,0 +1,34 @@
+/* 1. 设定文章卡片的固定高度 */
+#recent-posts > .recent-post-item {
+  height: 160px !important;      /* 这里设置你理想的固定高度数值 */
+  padding: 0 !important;
+  margin-bottom: 20px !important;
+  overflow: hidden;              /* 确保内容不会超出固定的卡片边界 */
+}
+
+/* 2. 调整信息容器，使其在固定高度内垂直居中 */
+#recent-posts > .recent-post-item > .recent-post-info {
+  height: 100% !important;
+  padding: 0 40px !important;    /* 左右留 40px，上下由 flex 居中控制 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;       /* 核心：让标题、元数据、描述在 160px 内整体垂直居中 */
+}
+
+/* 3. 保持你要求的等距逻辑 */
+.recent-post-info > .article-title {
+  margin-bottom: 1px !important;  /* 标题与元数据间距 */
+}
+
+.recent-post-info > .article-meta-wrap {
+  margin-bottom: 1px !important;  /* 元数据与描述间距 */
+}
+
+/* 4. 限制描述文字行数，防止在固定高度下溢出 */
+.recent-post-info > .content {
+  margin-top: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;         /* 限制描述最多显示 2 行 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

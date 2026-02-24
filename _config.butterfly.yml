@@ -131,10 +131,10 @@ post_meta:
     tags: false # true or false 主頁是否顯示標籤
     label: true # true or false 顯示描述性文字
   post:
-    date_type: both # created or updated or both 文章頁日期是創建日或者更新日或都顯示
+    date_type: created # created or updated or both 文章頁日期是創建日或者更新日或都顯示
     date_format: date # date/relative 顯示日期還是相對日期
     categories: true # true or false 文章頁是否顯示分類
-    tags: true # true or false 文章頁是否顯示標籤
+    tags: false # true or false 文章頁是否顯示標籤
     label: true # true or false 顯示描述性文字
 
 # Display the article introduction on homepage
@@ -143,8 +143,8 @@ post_meta:
 # 3: auto_excerpt (default)
 # false: do not show the article introduction
 index_post_content:
-  method: 3
-  length: 500 # if you set method to 2 or 3, the length need to config
+  method: 2
+  length: 100 # if you set method to 2 or 3, the length need to config
 
 # anchor
 anchor:
@@ -933,10 +933,9 @@ css_prefix: true
 
 # Inject
 # Insert the code to head (before '</head>' tag) and the bottom (before '</body>' tag)
-# 插入代码到头部 </head> 之前 和 底部 </body> 之前
 inject:
   head:
-    # - <link rel="stylesheet" href="/xxx.css">
+    - <link rel="stylesheet" href="/css/custom.css"> # 添加这一行
   bottom:
     # - <script src="xxxx"></script>
 
