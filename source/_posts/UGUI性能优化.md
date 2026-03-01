@@ -12,7 +12,11 @@ categories:
 
 **Draw Call**
 
-在Unity里，Draw Call指的是CPU发出的绘制请求，其中包含了绘制所需的所有信息，如纹理信息、着色器等，Draw Call太多会增加CPU的消耗，会产生更多的发热和耗电，减少Draw Call就是合并请求（合批），以减少CPU在提交命令上花费太多时间。
+在Unity里，Draw Call指的是CPU发出的绘制请求，其中包含了绘制所需的所有信息，如纹理信息、着色器等。
+
+在现代硬件中，GPU的处理能力通常很强，假设一个场景有2000个Draw Call，CPU可能需要花20ms才能把这些指令发完，而GPU画完它们只需要5ms。也就是说，Draw Call太多的后果是GPU大部分时间都在等CPU发指令，这时游戏帧率就会卡在CPU提交这一步。
+
+减少Draw Call就是合并请求（合批），以减少CPU在提交命令上花费太多时间。
 
 **Frame Debugger**
 
@@ -34,9 +38,54 @@ categories:
 
 一般情况下不同Sprite的Texture是不一致的，但Unity提供了一个东西叫做图集（Sprite Atlas），可以把多张小图打包成一张大图，当Sprite被打入同一个图集，那么使用这些Sprite的UI组件最终引用的都是同一张纹理，即可合批。
 
+**另外少用Mask**
+
+Mask实现的具体原理是一个Drawcall来创建Stencil mask(来做像素剔除)，然后画所有子UI，再在最后一个Drawcall移掉Stencil mask。这头尾两个Drawcall无法跟其他UI操作进行Batch，所以表面上看加个Mask就会多2个Drawcall，而且Mask中的UI元素无法与其他batch，所以很多原本可以合并的UI就无法合并了，从而增加DrawCall。
+
 **一个坑**
 
 在使用Frame Debugger的时候我发现Draw Mesh的合并有时候成功有时候失效，后面控制变量找到了原因：我在Prefab编辑页面里运行游戏进行分析，Draw Mesh合并就会失效，要退到Scene里才会恢复正常。
 
+# 减少UI重建
+
+**什么是UI重建？**
+
+简单来说，当 UI 元素发生改变时，Unity 不会立刻更新它，而是把它标记为“脏（Dirty）”。在每一帧渲染前的 `Canvas.SendWillRenderCanvases` 阶段，Unity 会统一处理这些“脏”元素。
+
+**谁在触发重建？**
+
+| **触发类型**           | **常见操作**                                      | **性能代价**                                                 |
+| ---------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
+| **布局重建**           | 修改宽/高、锚点、Pivot、**启用/禁用物体**         | **极高**。会引起父节点和子节点的链式反应，尤其是有 `LayoutGroup` 时。 |
+| **图形重建**           | 修改 `Text` 内容、更换 `Image` 图片、修改 `color` | **高**。需要重新填充顶点缓冲区（Vertex Buffer）。            |
+| **网格重绘 (Rebatch)** | 仅仅修改坐标（Position/Rotation/Scale）           | **中**。不触发 Rebuild，但会触发 Canvas 的重新合批。         |
+
+**如何排查？**
+
+打开Unity的Profiler，找到UI模块，如果 `Canvas.SendWillRenderCanvases` 很高，说明重建太频繁了。
+
+**优化手段：**
+
+- **动静分离**
+
+  - 原理：Canvas是合批和重建的基本单位。如果一个Canvas里有一个图标在闪烁，整个Canvas都会被标记为“脏”并重新计算
+
+  - 做法：把频繁变动的UI（如小地图、血条、倒计时）放在一个Canvas下；把静态的UI（如背景、边框）放在另一个Canvas下
+- 慎用layout group
+
+  - 当子物体改变时，它会频繁地进行嵌套递归计算，并调用大量的 `GetComponent`
+- 隐藏UI的正确手段
+
+  - 错误写法：`gameObject.SetActive(false)`。这会直接触发整个 Canvas 的布局重建
+  - 优化写法
+    - 移出屏幕：不会触发重建（Rebuild），但是会触发重绘（Rebatch）
+    - Canvas Group：修改 `alpha = 0` 并关闭 `blocksRaycasts`
+- 用修改材质属性替代修改`Image.color`
+  - 修改`Image.color`
+    - UGUI会直接修改存储在内存中的顶点颜色数据，因为网格（Mesh）的顶点属性发生了变化，Unity 必须重新调用 `Graphic.UpdateGeometry()`，把这块包含了新颜色数据的网格重新填充并上传到 GPU，属于典型的图形重建。
+
+  - 通过 `Image.material.SetColor("_Color", myColor)` 或使用 `CanvasRenderer.SetColor` 
+    - 它修改的是渲染管线中的**着色器变量**（Uniform 变量），而不是网格本身的顶点，不会触发重建
+    - 前者可能会打断合批（产生新的材质实例），后者不会
 
 
