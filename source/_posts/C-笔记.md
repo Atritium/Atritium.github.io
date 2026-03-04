@@ -836,120 +836,208 @@ C#：调用 Lambda 涉及到委托的调用（有一定的间接寻址开销）�
 
 ### 7.1 智能指针
 
-智能指针主要解决一个内存泄露的问题，它可以自动地释放内存空间。因为它本身是一个类，当函数结束的时候会调用析构函数，并由析构函数释放内存空间。智能指针分为共享指针（`shared_ptr`）, 独占指针（`unique_ptr`）和弱指针（`weak_ptr`）。
+智能指针通过RAII（资源获取即初始化）技术，把原本脆弱的裸指针封装成一个对象。让栈上的对象析构时，自动处理堆上的内存。智能指针分为独占指针（`unique_ptr`）、共享指针（`shared_ptr`）和弱指针（`weak_ptr`）。
 
-#### 7.1.1 shared_ptr
+**为什么要使用智能指针？（解决下面三个问题）**
+
+- 内存泄漏：忘了写`delete`
+- 野指针/悬空指针：对象删了，但是指针还指着原来的内存地址，下次访问会直接崩溃
+- 二次释放：两个地方都写了`delete`
+
+#### 7.1.1 unique_ptr
 
 ##### 1 描述
 
-shared_ptr允许多个指针指向同一个对象。
+它是最常用、开销最小（几乎零额外开销）的智能指针。
 
-**物理结构：双指针模型**
+- 核心逻辑： 同一时间只能有一个 `unique_ptr` 指向该对象
+- 底层行为： **它删除了拷贝构造函数**。你不能把它赋值给别人，但你可以用 `std::move` 把所有权“转让”出去
+- 适用场景： 局部变量、类成员变量，明确知道生命周期跟随某个特定对象的场景
 
-当你定义一个 `shared_ptr<T> p` 时，这个 `p` 在栈上通常占用 **16 字节**（64位系统），内部包含两个裸指针：
+##### 2 使用
 
-- Ptr：指向堆内存中的对象实体
-- Control Block Ptr：指向一个名为控制块（Control Block）的堆空间
+当你确认一个资源有且仅有一个负责人时，用`unique_ptr`。
 
-控制块：
-
-```c++
-struct ControlBlock {
-    std::atomic<long> strong_count;   // 强引用计数
-    std::atomic<long> weak_count;     // 弱引用计数（用于 weak_ptr）
-    T*                managed_ptr;    // 指向被管理对象（有时放在这里，有时不放）
-    deleter_type      deleter;        // 删除器（默认是 delete）
-    // 可能还有 allocator 等
-};
-```
-
-当`strong_count` → 0 时 → 调用`deleter`删除对象 + 销毁控制块（如果`weak_count`也为 0）。
-
-##### 2 make_shared
-
-make_shared可以用于安全地分配动态内存。
-
-原因：对于普通初始化`shared_ptr<int> p(new int(42))`，会执行两次堆分配。
-
-- 执行`new int`
-- 构造`shared_ptr`
-
-而如果使用make_shared进行初始化，仅进行一次堆分配。
+比如在Unity里一个`GameObject`拥有一个`Transform`，这个`Transform`组件的生命周期完全跟随`GameObject`，当`GameObject`销毁时，`Transform`必销毁。
 
 ```c++
-shared_ptr<int> p3 = make_shared<int>(42);
-```
-
-##### 3 shared_ptr是否线程安全
-
-`shared_ptr`的引用计数增减是线程安全的，但`shared_ptr`对象本身不是线程安全的（不允许多个线程同时对**同一个**`shared_ptr`进行修改）。
-
-#### 7.1.2 unique_ptr
-
-同一时刻只能有一个unique_ptr指向给定对象。
-
-#### 7.1.3 weak_ptr
-
-为了解决`shared_ptr`的循环引用问题。
-
-循环引用的发生：当两个或多个`shared_ptr`互相指向对方（形成闭环），导致各自的引用计数永远无法降到 0，从而无法触发析构和内存释放的现象，就叫做循环引用。
-
-使用`weak_ptr`解决循环引用的核心方法是：把循环引用中的一条边改成`weak_ptr`，让它不增加强引用计数，从而打破闭环，使引用计数能正常归零，最终实现对象正确析构。
-
-```c++
-#include <memory>
-#include <iostream>
-
-struct Node {
-    shared_ptr<Node> next;          // 下一节点用强引用（拥有所有权）
-    weak_ptr<Node>   prev;          // 上一节点用弱引用（不拥有所有权）
-
-    ~Node() { std::cout << "Node 析构\n"; }
-
-    // 安全访问 prev 的方式
-    shared_ptr<Node> getPrev() const {
-        return prev.lock();         // lock() 返回 shared_ptr，如果对象已销毁则返回空
-    }
-
-    // 示例：打印 prev 是否还活着
-    void printPrevStatus() const {
-        if (auto p = prev.lock()) {
-            std::cout << "prev 还活着\n";
-        } else {
-            std::cout << "prev 已经被销毁\n";
-        }
-    }
-};
-
-int main() {
-    std::shared_ptr<Node> n1, n2;
-
-    {
-        n1 = std::make_shared<Node>();
-        n2 = std::make_shared<Node>();
-
-        n1->next = n2;          // 强引用，n2 计数 +1
-        n2->prev = n1;          // 弱引用，n1 计数不变
-
-        std::cout << "n1 use_count: " << n1.use_count() << "\n";  // 1
-        std::cout << "n2 use_count: " << n2.use_count() << "\n";  // 2
-    }
-
-    // 离开作用域后 n1 和 n2 都会正常析构
-    // 因为 n2->prev 是 weak_ptr，不阻止 n1 释放
+class GameObject{
+private:
+	std::unique_ptr<Transform> m_transform;
+public:
+	GameObject() : m_transform(std::make_unique<Transform>()) {};
 }
 ```
 
-为什么在解决循环引用时，要用`.lock()`来访问`weak_ptr`？
+也很适合做工厂模式的返回值，代表了“我创建了它并交给你管理，以后就是你的了”。
 
-`weak_ptr`本身不能直接访问被指向的对象，必须先通过`.lock()`转换为一个临时的 `shared_ptr`，才能安全地使用它。
+##### 3 unique_ptr是怎么做到独占的
 
-调用`.lock()`会返回：
+在 C++ 中，一个对象如果要被“共享”或“复制”，通常是通过 **拷贝构造函数** (`Copy Constructor`) 或 **拷贝赋值运算符** (`Copy Assignment`) 完成的。
 
-- 如果对象还活着 → 返回一个非空的`shared_ptr`（引用计数 +1）
-  - 创建一个临时的`shared_ptr`，因此会导致引用计数+1
+`unique_ptr` 在底层直接把这两个功能给**删掉了**（使用 `delete` 关键字）：
 
-- 如果对象已经被销毁 → 返回一个空的`shared_ptr`
+```c++
+template <typename T>
+class unique_ptr {
+public:
+    // 1. 删掉拷贝构造：禁止 unique_ptr p2(p1);
+    unique_ptr(const unique_ptr&) = delete;
+
+    // 2. 删掉拷贝赋值：禁止 p2 = p1;
+    unique_ptr& operator=(const unique_ptr&) = delete;
+    
+    // ... 其他代码
+};
+```
+
+**留个后门：移动语义**
+
+虽然不能“克隆”，但所有权是可以“转让”的。`unique_ptr` 允许**移动（Move）**。
+
+它实现了 **移动构造函数**：
+
+```c++
+// 允许移动构造：unique_ptr p2(std::move(p1));
+unique_ptr(unique_ptr&& other) noexcept {
+    this->m_ptr = other.m_ptr; // 接管内存
+    other.m_ptr = nullptr;     // 把原指针置空，确保只有一个活口
+}
+```
+
+#### 7.1.2 shared_ptr
+
+##### 1 描述
+
+- 核心逻辑： 允许多个指针指向同一个对象。内部维护一个引用计数
+- 底层行为： 每拷贝一次，计数器原子递增；每析构一次，计数器原子递减。当计数减到 0 时，触发 `delete`
+- 适用场景： 资源共享，多个对象需要共同持有某一块内存的访问权（如多个游戏实体共享同一个纹理资源）
+
+##### 2 使用场景
+
+当一个资源需要被多个系统引用，且你无法确定谁会最后离开时，用`shared_ptr`。
+
+例如资源加载器中的纹理：想象一张“草地”纹理。场景里可能有 100 个石块模型都引用了这张纹理。你不能在第一个石块销毁时就把纹理删了，必须等所有引用它的对象都销毁。
+
+```c++
+class Stone {
+    std::shared_ptr<Texture> m_grassTexture; // 多个石块共享同一个纹理
+};
+
+// 资源池
+std::unordered_map<string, std::shared_ptr<Texture>> texturePool;
+```
+
+#### 7.1.3 weak_ptr
+
+##### 1 描述
+
+它是为了解决 `shared_ptr` 的致命缺陷而生的。
+
+- 核心逻辑： 它指向 `shared_ptr` 管理的对象，但不增加引用计数
+
+- 底层行为： 它不直接操作指针。要使用它，必须先调用 `.lock()` 方法，看它指向的对象是否还活着
+
+- 适用场景： 解决循环引用，或者作为“缓存”机制，观察一个对象是否被释放
+
+##### 2 使用
+
+**实例A：解决循环引用问题**
+
+如果父亲持有儿子的 `shared_ptr`，儿子 也持有父亲的 `shared_ptr`。他们会互相等对方先释放，导致内存永久泄漏。
+
+方案是让一方（通常是下级对上级）持有`weak_ptr`。
+
+```c++
+class Node {
+    std::shared_ptr<Node> m_child;   // 向下用 shared
+    std::weak_ptr<Node> m_parent;    // 向上用 weak，打破循环
+};
+```
+
+**实例B：UI系统的对象追踪**
+
+你的 UI 界面上显示了一个怪物的血条，UI需要实时更新怪物的坐标。
+
+风险： 如果 UI 用 `shared_ptr` 盯着怪物，怪物被打死了，后端逻辑想销毁怪物，却发现 UI 还拽着它不放，导致怪物“死而不僵”
+
+方案：UI 持有怪物的 `weak_ptr`。每帧通过 `lock()` 检查一下怪物还在不在，不在了就把血条关掉
+
+```c++
+if (auto monster = m_monsterWeakPtr.lock()) { // 检查怪物是否还活着
+    UpdateHealthBar(monster->GetHP());
+} else {
+    CloseUI(); // 怪物已销毁
+}
+```
+
+##### 3 weak_ptr.lock()
+
+简单来说，这个方法是一个“提升”的操作，它的功能是：检查它观察的对象是否还活着。如果活着，就临时产生一个 `shared_ptr` 来让你安全地使用它；如果对象已经销毁，则返回一个空的 `shared_ptr`。
+
+**`.lock()`内部做了什么？**
+
+当你调用`.lock()`时，它在底层执行了以下逻辑：
+
+- 访问控制块：找到记录引用计数的那个堆内存区域
+- 检查强引用计数
+  - 如果>0，说明对象还在，它会将强引用计数原子性地+1，然后返回一个新的`shared_ptr`
+  - 如果=0，说明对象已经被析构，它返回一个空的`shared_ptr`
+
+#### 7.1.4 手写一个shared_ptr
+
+```c++
+template <typename T>
+class MySharedPtr {
+public:
+    // 构造函数
+    explicit MySharedPtr(T* ptr = nullptr) : m_ptr(ptr) {
+        m_count = new unsigned int(ptr ? 1 : 0);
+    }
+
+    // 拷贝构造
+    MySharedPtr(const MySharedPtr& other) 
+        : m_ptr(other.m_ptr), m_count(other.m_count) {
+        if (m_count) (*m_count)++;
+    }
+
+    // 移动构造 (加上 noexcept)
+    MySharedPtr(MySharedPtr&& other) noexcept 
+        : m_ptr(other.m_ptr), m_count(other.m_count) {
+        other.m_ptr = nullptr;
+        other.m_count = nullptr;
+    }
+
+    // 赋值运算符：使用 Copy-and-Swap 保证异常安全
+    MySharedPtr& operator=(MySharedPtr other) noexcept {
+        this->swap(other);
+        return *this;
+    }
+
+    void swap(MySharedPtr& other) noexcept {
+        std::swap(m_ptr, other.m_ptr);
+        std::swap(m_count, other.m_count);
+    }
+
+    // 析构函数
+    ~MySharedPtr() {
+        release();
+    }
+private:
+    T* m_ptr;               // 实际的数据指针
+    unsigned int* m_count;  // 指向堆上的引用计数
+
+    void release() {
+        if (m_count) {
+            (*m_count)--;
+            if (*m_count == 0) {
+                delete m_ptr;
+                delete m_count;
+            }
+        }
+    }
+};
+```
 
 ### 7.2 new/delete && malloc/free
 
@@ -1212,8 +1300,6 @@ vector<string> v = std::move(big_vector);  // 调用移动构造
 
 ##### 1 实现移动语义
 
- 移动操作必须声明为noexcept，否则很多容器不会用移动而用拷贝。
-
 ```c++
 class BigData {
     std::string* data;
@@ -1311,6 +1397,46 @@ void perfect_forward(T&& param) {          // 注意：万能引用 T&&
 
 - 如果 `T` 是 `int&`（说明原始是左值），它返回 `static_cast<int&>(arg)`
 - 如果 `T` 是 `int`（说明原始是右值），它返回 `static_cast<int&&>(arg)`
+
+### 8.3 noexcept
+
+#### 8.3.1 noexcept的用法
+
+**作为说明符：告诉编译器，我这个函数不抛异常**
+
+- ```c++
+  void Swap(MyData& a, MyData& b) noexcept { ... }
+  ```
+
+- 如果标了`noexcept`但是偏偏函数体内部抛出了异常，它会直接调用`std::terminate`，强制你的程序立刻崩溃并退出
+
+- 因为编译器为了优化，已经**去掉了所有异常回滚代码**，当异常发生时，为了防止内存状态混乱导致不可预测的后果，自杀是保护系统的唯一手段
+
+**作为运算符：在编译期检查一个表达式是否可能抛出异常**
+
+- ```c++
+  // 如果 Swap 是 noexcept 的，那么这行编译出来就是 true
+  bool isSafe = noexcept(Swap(x, y));
+  ```
+
+#### 8.3.2 使用场景
+
+使用场景：
+
+- 移动构造与移动赋值
+  -  通过给移动语义加上 `noexcept` 担保，确保 STL 容器在扩容时执行高效的物理移动而非沉重的深度拷贝
+  - `vector`在底层使用了一个探测工具叫做`std::move_if_noexcept`，如果对象的移动构造函数标了`noexcept`，它就会使用移动构造
+- 析构函数
+  - C++11 后默认就是 `noexcept`。绝对不要让异常逃离析构函数，否则程序会崩溃
+  - 你的代码正在处理一个异常（比如文件读取失败），此时程序开始**栈回滚**
+  - 在栈回滚过程中，局部对象会被自动销毁，于是触发了**析构函数**
+  - 如果此时析构函数也抛出了一个异常，那么现在就有两个异常同时存在
+  - C++规定，当两个异常同时存在时，系统无法判断该处理哪个，于是会立即调用`std::terminate`强制让程序崩溃
+- 叶子节点函数
+  - 那些只是做简单运算、位移、指针交换、或者纯内存操作的函数，果断加上
+  - 消除函数调用时的异常处理开销，精简机器码
+- 交换函数（Swap）
+  - 许多算法依赖于安全的 `swap`
 
 ## 9 虚函数、纯虚函数和抽象类
 
@@ -1773,6 +1899,16 @@ C++中最典型的实现方式：抽象基类。
 
 - 静态成员函数没有`this`指针
   - 静态成员函数不能声明为 `virtual`，最根本的原因可以归结为一句话：**`virtual` 函数依赖于“对象实例”来查表，而 `static` 函数是脱离“对象实例”存在的**
+
+### static和const的区别
+
+它们的侧重点是不一样的，`static`侧重于生命周期和作用域限制，而`const`侧重于不可变性。
+
+`static`存储在静态区，而`const`视使用情况存储在常量区或者栈上。
+
+当`static`和`const`修饰类成员变量时，`static`是同一个类只有一份的，而`const`是每个对象都有一份的。
+
+当`static`和`const`修饰类成员函数时，`static`函数没有`this`指针，只能访问其他静态成员变量或者静态成员函数，而`const`则是用`const`修饰了`this`指针（指针常量，无法修改指针指向的内容），以此做到在函数体内不对类成员变量进行修改。
 
 ### float占用几个字节？64位中呢？float类型数据在while循环中一直加一，会溢出吗？
 
@@ -2488,11 +2624,12 @@ using string = basic_string<char>;
 如果系数 $k < 1 + \sqrt{5}/2 \approx 1.618$（黄金分割比），在经过有限次的扩容后，新申请的内存块就有可能**复用**之前释放的内存碎片。
 
 - 假设起始容量为 16：
-  - 第 1 次：申请 24，释放 16。
-  - 第 2 次：申请 36，释放 24。此时总空闲 = 16 + 24 = 40。
-  - 第 3 次：申请 54，释放 36。此时总空闲 = 40 + 36 = 76。
-  - 第 4 次：申请 81...
-- 结论： 在第 3 次扩容时，新申请的 54 字节小于之前释放的总和 76 字节
+  - 第 1 次：申请 24，释放 16
+  - 第 2 次：申请 36，释放 24。此时总空闲 = 16 + 24 = 40
+  - 第 3 次：申请 54，释放 36。此时总空闲 = 40 + 36 = 76
+  - 第 4 次：申请 81，释放54。此时总空闲为 = 76 + 54 = 130
+  - 第 5 次：申请121，释放81...
+- 结论：第5次内存申请时，前面释放的内存已经超过了要申请的内存
 - 后果： 内存分配器有机会把之前 `vector` 自己用过并释放的内存重新拼凑起来给它用。这大大提高了内存的利用率，并减少了系统向 OS 申请新页（Page）的频率
 
 但为什么有时候还是用2倍扩容：

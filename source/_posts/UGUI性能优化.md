@@ -1,5 +1,5 @@
 ---
-title: UGUI性能优化
+title: UGUI渲染全流程和性能优化
 date: 2025-06
 tags: 
 - Unity
@@ -8,11 +8,46 @@ categories:
 - Unity
 ---
 
-# 减少Draw Call
+# 1 渲染全流程
+
+在 UGUI 中，这个过程被称为 **Canvas Rebuild (画布重建)**。它是在每一帧渲染之前的 `LateUpdate` 阶段，通过 `Canvas.SendWillRenderCanvases` 统一触发的。
+
+**第一阶段：布局阶段（Layout）**
+
+这一阶段的核心是确定UI大小和位置（处理那些调用`SetLayoutDirty`标记为脏的UI）。
+
+**第二阶段：图形重绘（Graphic Rebuild）**
+
+当位置定死之后，接下来的任务是生成几何数据（处理那些调用 `SetVerticesDirty` （顶点脏） 或 `SetMaterialDirty`（材质脏）标记为脏的UI）。
+
+- **生成网格 (Rebuild Mesh)**：
+  - 每个 `Graphic` 组件（如 Image）根据其 `RectTransform` 边界，计算出 4 个顶点坐标、UV 坐标和顶点颜色
+  - **文本组件**最特殊：它需要为每一个字符生成一个 4 顶点的矩形面片
+    - 原生Text（位图：Bitmap）：它将字体看作一张张“小位图”。每一个字符都是从一张大贴图上采样对应的像素块。因此当缩放Text时，CPU 必须重新生成网格，并请求一套对应字号的新位图。如果字号很大，贴图会变得非常模糊
+    - TextMeshPro（SDF-有向距离场）：它存储的不是像素点，而是像素距离字体轮廓的**距离信息**。无论文字放大多少倍，Shader 都可以通过这个距离场计算出平滑的边缘。**优势**：**缩放文字不会触发顶点重建（Vertices Rebuild）**，它只需要修改 Shader 参数或缩放变换。
+- **计算裁剪（Clipping)**：如果是被 `Mask` 或 `RectMask2D` 包裹的 UI，此时会计算哪些顶点在显示范围内，剔除范围外的顶点数据
+
+**第三阶段：合批与排序 (Batching & Sorting)**
+
+- **深度排序 (Depth Sorting)**：
+  - 为了决定谁盖住谁，UI 会进行深度排序
+  - **规则**：层级面板（Hierarchy）里下方的元素通常盖住上方的。如果两个元素重叠且材质/贴图不同，合批就会断开
+- **合批 (Batching)**
+  - Canvas 会扫描所有可见的 UI 元素
+  - **合并标准**：如果连续的多个元素使用**相同的贴图（Atlas）和相同的 Shader 参数**，它们会被合并成一个巨大的 `VBO` (顶点缓冲区对象)
+  - **结果**：将成百上千个小 Image 变成一个大网格，从而减少 **DrawCall**
+
+**第四阶段：渲染提交 (Rendering)**
+
+发送DrawCall。
+
+# 2 性能优化
+
+## 2.1 减少Draw Call
 
 **Draw Call**
 
-在Unity里，Draw Call指的是CPU发出的绘制请求，其中包含了绘制所需的所有信息，如纹理信息、着色器等。
+在Unity里，Draw Call指的是CPU发出的绘制请求，其中包含的数据有：几何数据（我要画什么：Pos、UV、Color...）和渲染状态（我要怎么画：Shader、Textures...）。
 
 在现代硬件中，GPU的处理能力通常很强，假设一个场景有2000个Draw Call，CPU可能需要花20ms才能把这些指令发完，而GPU画完它们只需要5ms。也就是说，Draw Call太多的后果是GPU大部分时间都在等CPU发指令，这时游戏帧率就会卡在CPU提交这一步。
 
@@ -46,7 +81,7 @@ Mask实现的具体原理是一个Drawcall来创建Stencil mask(来做像素剔�
 
 在使用Frame Debugger的时候我发现Draw Mesh的合并有时候成功有时候失效，后面控制变量找到了原因：我在Prefab编辑页面里运行游戏进行分析，Draw Mesh合并就会失效，要退到Scene里才会恢复正常。
 
-# 减少UI重建
+## 2.2 减少UI重建
 
 **什么是UI重建？**
 
@@ -87,5 +122,4 @@ Mask实现的具体原理是一个Drawcall来创建Stencil mask(来做像素剔�
   - 通过 `Image.material.SetColor("_Color", myColor)` 或使用 `CanvasRenderer.SetColor` 
     - 它修改的是渲染管线中的**着色器变量**（Uniform 变量），而不是网格本身的顶点，不会触发重建
     - 前者可能会打断合批（产生新的材质实例），后者不会
-
 
