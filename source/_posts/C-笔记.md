@@ -2657,13 +2657,13 @@ using string = basic_string<char>;
 - 内存浪费
   - `vector` 的 `capacity` 通常大于 `size`。为了保证扩容效率，它总是预留了一部分空间。如果你的 `vector` 很大且有很多空余，这部分内存是被白白占用的
 
-### 4.4 `reserve()` VS `resize()`
+### 4.4 reserve() VS resize()
 
 `reserve(n)`： 仅预留空间。只改变 `capacity`，不创建对象。
 
 `resize(n)`： 改变大小。不仅改变 `capacity`，还会调用构造函数创建 $n$ 个对象，改变 `size`。
 
-### 4.5 `push_back()` VS `emplace_back()`
+### 4.5 push_back() VS emplace_back()
 
 `push_back`：先构造一个临时对象，再拷贝/移动到容器内
 
@@ -2740,6 +2740,40 @@ Item* p = new (buf) Item("Sword", 100);
 - 非线程安全
   - 普通`vector`： 如果你同时修改 `v[0]` 和 `v[1]`，在普通 vector 中是安全的，因为它们在不同的内存地址
   - `vector<bool>`： 因为 `v[0]` 到 `v[7]` 可能都挤在同一个 byte 里。当你尝试同时修改它们时，多个线程会竞争同一个内存字节，导致竞态条件（Race Condition）
+
+### 4.7 vector几种删除元素的方式
+
+**删除最后一个元素：`pop_back()`**
+
+- 原理：直接销毁最后一个元素，并使`size`-1
+- 性能：$O(1)$，因为它不涉及任何其他元素的移动
+
+**删除迭代器指向的元素：`erase()`**
+
+- 写法：`v.erase(v.begin()+2); //删除第3个元素`
+- 原理：被删元素之后的所有元素都要依次向前挪动一个位置，以填补空缺
+- 性能：$O(n)$
+
+**删除特定值：`Erase-Remove`**
+
+```c++
+v.erase(std::remove(v.begin(), v.end(), 10), v.end());
+```
+
+- `std::remove`：并不真的删除，而是把不需要删的元素“搬”到前面，返回一个指向“新逻辑末尾”的迭代器
+
+- `v.erase`：把新末尾到旧末尾之间的“垃圾数据”真正清理掉。
+
+**游戏开发黑科技：`Swap-and-Pop`**
+
+```c++
+// 假设要删掉下标为 i 的元素
+std::swap(v[i], v.back()); // 把要删的换到最后
+v.pop_back();              // 弹出末尾
+```
+
+- 原理：用最后一个元素覆盖掉要删的元素，然后只处理末尾
+- 性能：$O(1)$
 
 ## 5 list
 
